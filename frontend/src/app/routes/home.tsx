@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Plus, SlidersHorizontal } from 'lucide-react'
-import { Link, useLocation, useSearchParams } from 'react-router'
+import { Link, useLocation } from 'react-router'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,7 +16,6 @@ import {
 import { useGameActions } from '@/app/use-game-actions'
 import { ActiveFilterChips } from '@/features/games/components/active-filter-chips'
 import { GameCaseDialog } from '@/features/games/components/game-case-dialog'
-import type { CaseBackdrop } from '@/features/games/components/game-case-dialog'
 import { GameSearch } from '@/features/games/components/game-search'
 import { GameShowcase } from '@/features/games/components/game-showcase'
 import { GameSortSelect } from '@/features/games/components/game-sort-select'
@@ -35,10 +34,6 @@ export function Home() {
   const { renderAction, adminActions } = useGameActions()
   const [opened, setOpened] = useState<{ game: Game; origin: DOMRect } | null>(null)
   const openGame = (game: Game, origin: DOMRect) => setOpened({ game, origin })
-  // TEMPORARY: ?caseBg=dark|cover|light to compare backdrops; remove once the team picks one.
-  const [params] = useSearchParams()
-  const caseBg = params.get('caseBg')
-  const backdrop: CaseBackdrop = caseBg === 'cover' || caseBg === 'light' ? caseBg : 'dark'
 
   // The header search icon links to /#catalog; jump straight to the catalog.
   useEffect(() => {
@@ -124,7 +119,6 @@ export function Home() {
         onClosed={() => setOpened(null)}
         renderAction={renderAction}
         adminActions={adminActions}
-        backdrop={backdrop}
       />
     </div>
   )

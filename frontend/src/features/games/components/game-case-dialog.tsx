@@ -8,8 +8,6 @@ import { cn } from '@/lib/utils'
 import type { Game, GameSelection } from '../types'
 import { GameInfo } from './game-info'
 
-export type CaseBackdrop = 'dark' | 'cover' | 'light'
-
 type GameCaseDialogProps = {
   /** The game to show; null keeps the dialog closed */
   game: Game | null
@@ -18,7 +16,6 @@ type GameCaseDialogProps = {
   onClosed: () => void
   renderAction: (selection: GameSelection, game: Game) => ReactNode
   adminActions?: (game: Game) => ReactNode
-  backdrop?: CaseBackdrop
 }
 
 /**
@@ -68,7 +65,6 @@ export function GameCaseDialog({
   onClosed,
   renderAction,
   adminActions,
-  backdrop = 'dark',
 }: GameCaseDialogProps) {
   const viewport = useViewport()
   const wide = viewport.width >= 768
@@ -148,27 +144,15 @@ export function GameCaseDialog({
   const outsideFace: CSSProperties = { transform: wide ? 'rotateY(180deg)' : 'rotateX(180deg)' }
 
   const disc = Math.min(w, h) * 0.8
-  const darkPanel = backdrop !== 'light'
 
   return (
     <Dialog.Root open onOpenChange={(open) => !open && requestClose()}>
       <Dialog.Portal>
+        {/* The catalog stays visible behind, darkened and blurred. */}
         <Dialog.Overlay
-          className={cn(
-            'fixed inset-0 z-50 overflow-hidden',
-            backdrop === 'dark' && 'bg-brand/75 backdrop-blur-sm',
-            backdrop === 'light' && 'bg-muted/85 backdrop-blur-sm',
-            backdrop === 'cover' && 'bg-brand',
-          )}
+          className="fixed inset-0 z-50 bg-brand/75 backdrop-blur-sm"
           style={{ opacity: phase === 'origin' ? 0 : 1, transition: transition(FLY_MS) }}
-        >
-          {backdrop === 'cover' && (
-            <>
-              <img src={game.coverUrl} alt="" className="h-full w-full scale-125 object-cover blur-2xl" />
-              <div className="absolute inset-0 bg-brand/60" />
-            </>
-          )}
-        </Dialog.Overlay>
+        />
 
         <Dialog.Content
           aria-describedby={undefined}
@@ -193,9 +177,8 @@ export function GameCaseDialog({
             {/* Base half: the game info, revealed when the cover swings open. */}
             <div
               className={cn(
-                'absolute overflow-hidden border-4 border-brand bg-card text-foreground shadow-2xl',
+                'theme-case-dark absolute overflow-hidden border-4 border-brand bg-card text-foreground shadow-2xl',
                 wide ? 'rounded-r-lg' : 'rounded-b-lg',
-                darkPanel && 'theme-case-dark',
               )}
               style={halfSecond}
             >

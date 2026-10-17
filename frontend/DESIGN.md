@@ -122,9 +122,8 @@ iskačući prozor u obliku DVD kutije (`GameCaseDialog`). Katalog iza ostaje zat
 - Ctrl/Cmd-klik i dalje otvara punu stranicu igre u novom tabu; stranica `/games/:id` ostaje za
   linkove iz korpe
 - Uz `prefers-reduced-motion` kutija se samo pojavi, bez leta i vrtenja
-- Pozadina (privremeno bira se preko `?caseBg=`): `dark` tamna zamućena (podrazumevano), `cover`
-  zamućen uvećan cover igre, `light` svetlosiva. Za tamnu i cover varijantu desna strana koristi
-  tamne tokene iz `.theme-case-dark`
+- Pozadina: katalog iza je zatamnjen i zamućen (`bg-brand/75` + blur). Desna strana kutije koristi
+  tamne tokene iz `.theme-case-dark` (tamnosiva podloga, svetao tekst)
 
 ## Katalog
 - Telefon: polje za pretragu, zatim red sa dugmetom „Filters“ i izborom sortiranja; mreža od 2 kolone

@@ -66,6 +66,20 @@
   --font-sans: var(--font-body);
 }
 
+@theme {
+  --animate-cart-bounce: cart-bounce 250ms ease-out;
+
+  @keyframes cart-bounce {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.4);
+    }
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 
 import { Home } from '@/app/routes/home'
+import { Game } from '@/app/routes/game'
 import { Games } from '@/app/routes/games'
 import { NotFound } from '@/app/routes/not-found'
 import { SignIn } from '@/app/routes/sign-in'
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
     children: [
       { path: '/', element: <Home /> },
       { path: '/games', element: <Games /> },
+      { path: '/games/:id', element: <Game /> },
       { path: '/sign-in', element: <SignIn /> },
       { path: '*', element: <NotFound /> },
     ],

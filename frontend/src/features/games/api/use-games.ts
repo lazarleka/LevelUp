@@ -1,5 +1,7 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { NotFoundError } from '@/lib/mock-db'
+
 import type { GameFilters, NewGame } from '../types'
 import { gamesApi } from './games-api'
 
@@ -17,6 +19,8 @@ export function useGame(id: number) {
   return useQuery({
     queryKey: ['games', id],
     queryFn: () => gamesApi.get(id),
+    // A missing game will not appear on a retry, so show "not found" right away.
+    retry: (failures, error) => !(error instanceof NotFoundError) && failures < 3,
   })
 }
 

@@ -51,6 +51,17 @@ export type Game = {
 
 export type NewGame = Omit<Game, 'id' | 'rating' | 'soldCount'>
 
+export type Edition = 'standard' | 'deluxe'
+
+/** What the customer picked on the game page, ready to go into the cart. */
+export type GameSelection = {
+  game: Game
+  platform: Platform
+  edition: Edition
+  /** Final price of the chosen edition, discount included */
+  unitPrice: number
+}
+
 export type GameSort = 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'best-selling'
 
 export const sortLabels: Record<GameSort, string> = {

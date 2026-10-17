@@ -41,19 +41,15 @@ function useViewport() {
   return size
 }
 
-/** Size of one half of the case: side by side on wide screens, stacked on phones. */
-function caseSize(viewport: { width: number; height: number }, wide: boolean) {
-  if (wide) {
-    let height = Math.min(viewport.height * 0.82, 620)
-    let width = height * 0.72
-    if (width * 2 > viewport.width * 0.94) {
-      width = viewport.width * 0.47
-      height = width / 0.72
-    }
-    return { width, height }
+/** Size of one half of the case; the two halves always open side by side. */
+function caseSize(viewport: { width: number; height: number }) {
+  let height = Math.min(viewport.height * 0.82, 620)
+  let width = height * 0.72
+  if (width * 2 > viewport.width * 0.94) {
+    // Narrow screens: halves as wide as fit, and taller than a real case so the info has room.
+    width = viewport.width * 0.47
+    height = Math.min(viewport.height * 0.78, Math.max(width / 0.72, width * 3))
   }
-  const width = Math.min(viewport.width * 0.9, 380)
-  const height = Math.min(viewport.height * 0.45, width * 1.05)
   return { width, height }
 }
 
@@ -67,8 +63,8 @@ export function GameCaseDialog({
   adminActions,
 }: GameCaseDialogProps) {
   const viewport = useViewport()
-  const wide = viewport.width >= 768
-  const { width: w, height: h } = caseSize(viewport, wide)
+  const narrow = viewport.width < 768
+  const { width: w, height: h } = caseSize(viewport)
 
   const [phase, setPhase] = useState<Phase>('origin')
   const [reduceMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches)
@@ -89,18 +85,12 @@ export function GameCaseDialog({
       return
     }
     setPhase('origin')
-    // Two frames so the browser paints the case at the origin before it starts to fly.
-    const frame = requestAnimationFrame(() =>
-      requestAnimationFrame(() => {
-        setPhase('center')
-        later(FLY_MS, () => setPhase('open'))
-        later(FLY_MS + OPEN_MS, () => setPhase('spin'))
-      }),
-    )
-    return () => {
-      cancelAnimationFrame(frame)
-      clearTimers()
-    }
+    // A short pause so the browser paints the case at the origin before it starts to fly.
+    // (A timer rather than animation frames, which a background tab never runs.)
+    later(30, () => setPhase('center'))
+    later(30 + FLY_MS, () => setPhase('open'))
+    later(30 + FLY_MS + OPEN_MS, () => setPhase('spin'))
+    return clearTimers
   }, [game, reduceMotion])
 
   // Closing runs the same steps backwards, then unmounts.
@@ -127,21 +117,25 @@ export function GameCaseDialog({
       : 'none'
 
   // Open, the whole case shifts so both halves are centered; closed, only the base half is.
-  const bookStyle: CSSProperties = wide
-    ? { left: -w, top: 0, width: 2 * w, height: h, transform: isOpen ? `translateX(${w / 2}px)` : 'none' }
-    : { left: 0, top: -h, width: w, height: 2 * h, transform: isOpen ? `translateY(${h / 2}px)` : 'none' }
+  const bookStyle: CSSProperties = {
+    left: -w,
+    top: 0,
+    width: 2 * w,
+    height: h,
+    transform: isOpen ? `translateX(${w / 2}px)` : 'none',
+  }
 
   const halfFirst: CSSProperties = { left: 0, top: 0, width: w, height: h }
-  const halfSecond: CSSProperties = wide ? { left: w, top: 0, width: w, height: h } : { left: 0, top: h, width: w, height: h }
+  const halfSecond: CSSProperties = { left: w, top: 0, width: w, height: h }
 
   // The cover hinges on the spine: closed it lies flipped over the base half.
   const coverStyle: CSSProperties = {
     ...halfFirst,
-    transformOrigin: wide ? 'right center' : 'center bottom',
-    transform: isOpen ? 'none' : wide ? 'rotateY(180deg)' : 'rotateX(-180deg)',
+    transformOrigin: 'right center',
+    transform: isOpen ? 'none' : 'rotateY(180deg)',
     transition: transition(OPEN_MS),
   }
-  const outsideFace: CSSProperties = { transform: wide ? 'rotateY(180deg)' : 'rotateX(180deg)' }
+  const outsideFace: CSSProperties = { transform: 'rotateY(180deg)' }
 
   const disc = Math.min(w, h) * 0.8
 
@@ -178,18 +172,19 @@ export function GameCaseDialog({
             <div
               className={cn(
                 'theme-case-dark absolute overflow-hidden border-4 border-brand bg-card text-foreground shadow-2xl',
-                wide ? 'rounded-r-lg' : 'rounded-b-lg',
+                'rounded-r-lg',
               )}
               style={halfSecond}
             >
               <div
-                className="h-full overflow-y-auto p-6 md:p-8"
+                className={cn('h-full overflow-y-auto', narrow ? 'px-3 pt-12 pb-4' : 'p-6 md:p-8')}
                 style={{ opacity: isOpen ? 1 : 0, transition: transition(OPEN_MS) }}
               >
                 <GameInfo
                   key={game.id}
                   game={game}
                   titleAs="h2"
+                  compact={narrow}
                   renderAction={renderAction}
                   adminActions={adminActions?.(game)}
                 />
@@ -208,7 +203,7 @@ export function GameCaseDialog({
                 aria-hidden="true"
                 className={cn(
                   'absolute inset-0 flex items-center justify-center border-4 border-brand bg-brand [backface-visibility:hidden]',
-                  wide ? 'rounded-l-lg' : 'rounded-t-lg',
+                  'rounded-l-lg',
                 )}
               >
                 {/* Tray ring molded into the plastic. */}

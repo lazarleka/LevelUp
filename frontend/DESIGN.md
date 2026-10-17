@@ -113,11 +113,13 @@ Klik na igru u katalogu ili na glavnu igru u Best sellers ne vodi na stranicu, n
 iskačući prozor u obliku DVD kutije (`GameCaseDialog`). Katalog iza ostaje zatamnjen, a adresa se ne menja.
 - **Izlet** (450 ms): zatvorena kutija sa coverom krene sa mesta igre na koju je kliknuto i
   odleti na sredinu ekrana
-- **Otvaranje** (650 ms): korica se u 3D okrene oko šarke i otvori ulevo (na telefonu nagore)
+- **Otvaranje** (650 ms): korica se u 3D okrene oko šarke i otvori ulevo, i na telefonu i na desktopu
 - **Disk** (300 ms, zatim stalno): disk sa coverom igre kao nalepnicom, rupom u sredini i sjajem
   izroni u ležište i polako se vrti (jedan krug na 8 s); sjaj stoji, nalepnica se okreće
-- Levo/gore: crna plastika sa ležištem i diskom. Desno/dole: sve informacije sa stranice igre
+- Levo: crna plastika sa ležištem i diskom. Desno: sve informacije sa stranice igre
   (izbor platforme i izdanja, cena, „Add to cart“, opis), sa skrolovanjem
+- Na telefonu su polovine uže (po 47% ekrana) i više od prave kutije (do 78% visine ekrana),
+  a informacije su u kompaktnom prikazu: manji naslov, cena i dugmad
 - Zatvaranje: X, Esc ili klik van kutije; animacija ide unazad i kutija se vrati na svoje mesto
 - Ctrl/Cmd-klik i dalje otvara punu stranicu igre u novom tabu; stranica `/games/:id` ostaje za
   linkove iz korpe

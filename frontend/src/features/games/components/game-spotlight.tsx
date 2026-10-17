@@ -31,7 +31,7 @@ export function GameSpotlight({ gameId }: GameSpotlightProps) {
         className="mx-auto aspect-[3/4] w-1/2 rounded-sm object-cover md:w-full"
       />
       <div className="flex flex-col items-start gap-4">
-        <p className="text-sm font-semibold tracking-widest text-primary uppercase">
+        <p className="text-sm font-semibold tracking-widest text-brand-foreground/70 uppercase">
           {comingSoon ? `Pre-order · releases ${releaseFormat.format(new Date(game.releaseDate))}` : 'Featured'}
         </p>
         <h1 className="text-4xl leading-none font-bold md:text-5xl">{game.title}</h1>
@@ -45,7 +45,7 @@ export function GameSpotlight({ gameId }: GameSpotlightProps) {
         </div>
         <div className="mt-2 flex items-center gap-4">
           <span className="font-heading text-3xl font-bold">€{price.toFixed(2)}</span>
-          <Button asChild size="lg">
+          <Button asChild size="lg" className="bg-brand-foreground text-brand hover:bg-brand-foreground/90">
             <Link to={`/games/${game.id}`}>{comingSoon ? 'Pre-order now' : 'View game'}</Link>
           </Button>
         </div>

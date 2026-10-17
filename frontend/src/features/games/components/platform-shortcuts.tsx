@@ -15,7 +15,7 @@ export function PlatformShortcuts() {
               className="group flex h-full items-center justify-between rounded-lg bg-brand px-4 py-6 text-brand-foreground transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none md:py-8"
             >
               <span className="font-heading text-xl font-bold md:text-2xl">{platformLabels[platform]}</span>
-              <ChevronRight className="size-5 text-primary transition-transform group-hover:translate-x-1 motion-reduce:transition-none" />
+              <ChevronRight className="size-5 text-brand-foreground/70 transition-transform group-hover:translate-x-1 motion-reduce:transition-none" />
             </Link>
           </li>
         ))}

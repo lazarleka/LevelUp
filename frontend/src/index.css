@@ -9,28 +9,28 @@
  */
 :root {
   --radius: 0.375rem;
-  --background: oklch(1 0 0); /* #FFFFFF */
-  --foreground: oklch(0.372 0.057 179.4); /* #164A41 */
+  --background: oklch(1 0 0); /* white */
+  --foreground: oklch(0.18 0 0); /* near black #111 */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.372 0.057 179.4);
+  --card-foreground: oklch(0.18 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.372 0.057 179.4);
-  --primary: oklch(0.804 0.139 76.7); /* #F1B24A, main actions */
-  --primary-foreground: oklch(0.372 0.057 179.4);
-  --secondary: oklch(0.527 0.079 144.9); /* #4D774E */
+  --popover-foreground: oklch(0.18 0 0);
+  --primary: oklch(0.18 0 0); /* black, main actions */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.37 0 0); /* dark gray #404040 */
   --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.968 0.014 138.7); /* #9DC88D tint */
-  --muted-foreground: oklch(0.527 0.079 144.9);
-  --accent: oklch(0.946 0.023 137.2); /* #9DC88D tint, hover backgrounds */
-  --accent-foreground: oklch(0.372 0.057 179.4);
+  --muted: oklch(0.97 0 0); /* light gray #f4f4f4 */
+  --muted-foreground: oklch(0.5 0 0); /* mid gray #666 */
+  --accent: oklch(0.94 0 0); /* hover backgrounds */
+  --accent-foreground: oklch(0.18 0 0);
   --destructive: oklch(0.58 0.2 27);
-  --border: oklch(0.912 0.009 179.6);
-  --input: oklch(0.912 0.009 179.6);
-  --ring: oklch(0.804 0.139 76.7);
-  --brand: oklch(0.372 0.057 179.4); /* #164A41, header bar */
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.86 0 0);
+  --ring: oklch(0.6 0 0); /* mid gray, visible on white and on black */
+  --brand: oklch(0.145 0 0); /* black header #0a0a0a */
   --brand-foreground: oklch(1 0 0);
-  --highlight: oklch(0.787 0.093 137.4); /* #9DC88D, "In stock" */
-  --highlight-foreground: oklch(0.372 0.057 179.4);
+  --highlight: oklch(0.92 0 0); /* light gray, "In stock" */
+  --highlight-foreground: oklch(0.18 0 0);
   --font-heading: 'Rajdhani', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }

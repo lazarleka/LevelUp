@@ -28,7 +28,7 @@ i greške, i stranica izgleda kako treba na 375 px i 1440 px.
 | 6 | Forma za igru (kreiranje / izmena, admin) | `/admin/games/new`, `/admin/games/:id/edit` | da, traži je radionica |
 | – | Stranica nije pronađena | `*` | postoji |
 
-Svi ekrani dele isti header: tamnozelena traka sa LevelUp logom, polje za pretragu (ikonica na
+Svi ekrani dele isti header: crna traka sa LevelUp logom, polje za pretragu (ikonica na
 telefonu, polje na desktopu), ikonica korpe sa brojem stavki i prijava / ime korisnika.
 
 ### 1. Početna
@@ -68,7 +68,7 @@ dugmetom „Obriši filtere“.
   postoji `deluxePrice`)
 - Cena za izabrano izdanje, stara cena precrtana kad je na popustu, oznaka „−20%“
 - „Na stanju“ / „Nema na stanju“; igre koje tek izlaze prikazuju „Pre-order · izlazi 19. nov 2026“
-- Dugme **Dodaj u korpu** (žuto, glavna akcija), sa količinom 1
+- Dugme **Dodaj u korpu** (crno, glavna akcija), sa količinom 1
 - Opis
 
 **Gotovo kada:** promena izdanja menja cenu, dodavanje radi i brojač u headeru „poskoči“,

@@ -28,7 +28,7 @@ export function CartButton() {
         <span
           // A new key restarts the animation on every added item.
           key={bounces}
-          className="absolute top-0 right-0 flex size-5 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground animate-cart-bounce motion-reduce:animate-none"
+          className="absolute top-0 right-0 flex size-5 items-center justify-center rounded-full bg-brand-foreground text-xs font-semibold text-brand animate-cart-bounce motion-reduce:animate-none"
         >
           {count}
         </span>

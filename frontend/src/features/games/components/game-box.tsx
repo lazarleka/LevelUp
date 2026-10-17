@@ -25,7 +25,7 @@ export function GameBox({ game }: GameBoxProps) {
       <div className="relative overflow-hidden rounded-sm border bg-muted transition-[translate,border-color] duration-200 group-hover:-translate-y-1 group-hover:border-primary motion-reduce:transition-none">
         <img src={game.coverUrl} alt={`${game.title} box art`} loading="lazy" className="aspect-[3/4] w-full object-cover" />
         {comingSoon ? (
-          <span className="absolute top-2 left-2 rounded-sm bg-brand px-2 py-1 text-xs font-semibold text-brand-foreground">
+          <span className="absolute top-2 left-2 rounded-sm border bg-background px-2 py-1 text-xs font-semibold text-foreground">
             Pre-order
           </span>
         ) : onSale && (

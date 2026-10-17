@@ -46,7 +46,7 @@ pnpm build       # produkcijski build
 - Komponente dobijaju podatke samo preko hookova iz `use-<name>.ts`, nikad direktnim pozivom
   `*-api.ts`
 - Boje, fontovi i radius samo iz tokena u `frontend/src/index.css`; bez hex vrednosti u
-  komponentama. Žuta (`primary`) je samo za akcije i cene na popustu
+  komponentama. Paleta je crna, siva i bela; crna (`primary`) je za glavne akcije
 - Mobile first: osnovne klase su za 375 px, `md:` / `lg:` za veće ekrane
 - Svaka lista i stranica sa podacima ima stanja učitavanja, prazne liste i greške
 - Bez `any`, bez `!` (non-null assertion), bez barrel `index.ts` fajlova

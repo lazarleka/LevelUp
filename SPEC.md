@@ -34,11 +34,12 @@ ikonica korpe sa brojem stavki i prijava / ime korisnika.
 Početna i katalog su jedna stranica: prvo najprodavanije igre, odmah ispod cela ponuda.
 
 **Najprodavanije (vrh stranice)**
-- Jedan karusel **Best sellers** (po `soldCount`), 10 igara, sa dugmadima ← → i linkom
-  „Prikaži sve“ koji sortira katalog ispod po prodaji
-- Strelice glatko pomeraju red za onoliko kutija koliko ih se vidi; leva strelica je onemogućena
-  na početku, desna na kraju. Na ekranu osetljivom na dodir radi i prevlačenje
-- 2 kutije se vide na 375 px, 6 na 1440 px
+- Slajder **Best sellers** sa 10 najprodavanijih igara (po `soldCount`): jedna glavna igra u
+  centru, manje igre levo i desno (što dalje od centra, to manje)
+- Na svake 3 sekunde red se sam pomeri za jedno mesto udesno; staje dok je miš iznad njega
+- Strelice ← →, prevlačenje na telefonu i klik na bočnu igru pomeraju red ručno; klik na glavnu
+  igru otvara njenu stranicu
+- Ispod glavne igre su njen rang, naslov i cena
 
 **Katalog (ispod)**
 - Mreža kutija igara: 2 kolone na telefonu, 3 na manjem tabletu, 4 na tabletu, 5 na desktopu
@@ -54,7 +55,8 @@ Početna i katalog su jedna stranica: prvo najprodavanije igre, odmah ispod cela
 - Filteri se primenjuju odmah, dok je panel otvoren
 - Broj rezultata („12 igara“)
 
-**Gotovo kada:** karusel se učitava preko `useGames` i strelice i prevlačenje rade; svaki filter i
+**Gotovo kada:** slajder se učitava preko `useGames`, sam se pomera, staje na hover, a strelice i
+prevlačenje rade; svaki filter i
 sortiranje menjaju mrežu, filteri se kombinuju, URL se ažurira i vraća stanje posle osvežavanja,
 a prazan rezultat prikazuje „Nijedna igra ne odgovara“ sa dugmetom „Obriši filtere“.
 

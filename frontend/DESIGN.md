@@ -78,17 +78,23 @@ površina na ekranu (osim headera).
 - Ista komponenta u karuselima i u mreži kataloga
 
 ## Početna sa katalogom
-Jedna stranica, odozgo nadole: karusel „Best sellers“, pa naslov „All games“, red sa pretragom,
+Jedna stranica, odozgo nadole: slajder „Best sellers“, pa naslov „All games“, red sa pretragom,
 dugmetom „Filters“ i sortiranjem, čipovi aktivnih filtera i mreža kutija.
 
-## Karusel
-- Naslov levo, link „Prikaži sve“ i dugmad ← → desno
-- Dugmad sa strelicama: kvadrat 40 px, crna (`primary`), onemogućena na krajevima sa 50% providnosti
-- Klik na strelicu glatko klizi za ceo ekran kutija (smooth scroll); bez animacije uz
-  `prefers-reduced-motion`
-- Na telefonu se vide 2 kutije (i deo treće), na desktopu 6; skrolovanje se „lepi“ za kutiju
-- Prevlačenje na ekranu osetljivom na dodir, strelice na svim veličinama
-- Red ima prostor iznad i ispod da podignuta kutija i senka ne budu odsečeni
+## Best sellers slider
+Polica sa najprodavanijim igrama na vrhu početne (`GameShowcase`), po uzoru na „Perpetual Motion“
+slajdere.
+- Jedna **glavna igra u centru**, najveća. Igre levo i desno od nje se smanjuju za 18% po koraku
+  udaljenosti, poravnate po dnu, pa red izgleda kao stepenice na obe strane
+- Vidi se do 3 igre sa svake strane na desktopu, po jedna (delimično) na telefonu
+- **Samo se pomera**: na svake 3 sekunde ceo red klizne za jedno mesto **udesno** (igra levo od
+  centra postaje glavna). Prelaz traje 700 ms sa mekim usporavanjem na kraju
+- **Pauza na hover**: dok je miš iznad slajdera (ili je fokus u njemu), kretanje stoji
+- Korisnik gleda levo i desno strelicama ← →, prevlačenjem prstom na telefonu ili klikom na
+  bočnu igru (ona dođe u centar); klik na glavnu igru otvara njenu stranicu
+- Bočne igre su malo zatamnjene, glavna ima senku
+- Ispod glavne igre: „#N best seller · izdavač“, naslov i cena, koji se menjaju uz kratko pojavljivanje
+- Uz `prefers-reduced-motion` nema automatskog kretanja ni animacije prelaza
 
 ## Katalog
 - Telefon: polje za pretragu, zatim red sa dugmetom „Filters“ i izborom sortiranja; mreža od 2 kolone

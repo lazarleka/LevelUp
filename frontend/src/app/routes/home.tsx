@@ -14,8 +14,8 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { ActiveFilterChips } from '@/features/games/components/active-filter-chips'
-import { GameCarousel } from '@/features/games/components/game-carousel'
 import { GameSearch } from '@/features/games/components/game-search'
+import { GameShowcase } from '@/features/games/components/game-showcase'
 import { GameSortSelect } from '@/features/games/components/game-sort-select'
 import { GamesFilters } from '@/features/games/components/games-filters'
 import { GamesGrid } from '@/features/games/components/games-grid'
@@ -40,11 +40,7 @@ export function Home() {
     <div className="flex flex-col gap-12">
       <h1 className="sr-only">LevelUp: new games for every platform</h1>
 
-      <GameCarousel
-        title="Best sellers"
-        filters={{ sort: 'best-selling' }}
-        seeAllTo="/?sort=best-selling#catalog"
-      />
+      <GameShowcase title="Best sellers" filters={{ sort: 'best-selling' }} />
 
       <section id="catalog" aria-labelledby="catalog-title" className="flex scroll-mt-4 flex-col gap-6">
         <div className="flex items-center justify-between gap-4">

@@ -16,30 +16,20 @@ type GameInfoProps = {
   /** The page uses h1; inside the game case dialog the title is an h2 */
   titleAs?: 'h1' | 'h2'
   titleId?: string
-  /** Smaller type and controls for the narrow half of the case on phones */
-  compact?: boolean
 }
 
 const releaseFormat = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
 const formatPrice = (value: number) => `€${value.toFixed(2)}`
 
-const optionClass = (selected: boolean, compact = false) =>
+const optionClass = (selected: boolean) =>
   cn(
-    'rounded-md border text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
-    compact ? 'px-2 py-1 text-xs' : 'px-4 py-2',
+    'rounded-md border px-4 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
     selected ? 'border-secondary bg-secondary text-secondary-foreground' : 'hover:bg-accent',
   )
 
 // Everything about one game except its box art: meta, pickers, price, buy action and description.
 // Used by the game page and by the game case dialog.
-export function GameInfo({
-  game,
-  renderAction,
-  adminActions,
-  titleAs: Title = 'h1',
-  titleId,
-  compact = false,
-}: GameInfoProps) {
+export function GameInfo({ game, renderAction, adminActions, titleAs: Title = 'h1', titleId }: GameInfoProps) {
   const [platform, setPlatform] = useState<Platform>(game.platforms[0] ?? 'ps5')
   const [edition, setEdition] = useState<Edition>('standard')
 
@@ -49,15 +39,12 @@ export function GameInfo({
   const onSale = game.discountPercent > 0
 
   return (
-    <div className={cn('flex flex-col', compact ? 'gap-4 text-sm' : 'gap-6')}>
+    <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
         <p className="text-sm text-muted-foreground">
           {game.publisher} · {genreLabels[game.genre]} · PEGI {game.pegi}
         </p>
-        <Title
-          id={titleId}
-          className={cn('leading-tight font-bold', compact ? 'text-xl' : 'text-3xl md:text-4xl')}
-        >
+        <Title id={titleId} className="text-3xl leading-tight font-bold md:text-4xl">
           {game.title}
         </Title>
         {game.rating > 0 ? (
@@ -85,7 +72,7 @@ export function GameInfo({
               key={option}
               type="button"
               aria-pressed={platform === option}
-              className={optionClass(platform === option, compact)}
+              className={optionClass(platform === option)}
               onClick={() => setPlatform(option)}
             >
               {platformLabels[option]}
@@ -100,7 +87,7 @@ export function GameInfo({
           <button
             type="button"
             aria-pressed={edition === 'standard'}
-            className={optionClass(edition === 'standard', compact)}
+            className={optionClass(edition === 'standard')}
             onClick={() => setEdition('standard')}
           >
             Standard
@@ -109,7 +96,7 @@ export function GameInfo({
             <button
               type="button"
               aria-pressed={edition === 'deluxe'}
-              className={optionClass(edition === 'deluxe', compact)}
+              className={optionClass(edition === 'deluxe')}
               onClick={() => setEdition('deluxe')}
             >
               Deluxe
@@ -120,7 +107,7 @@ export function GameInfo({
 
       <div className="flex flex-col gap-1">
         <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className={cn('font-heading font-bold', compact ? 'text-2xl' : 'text-4xl')}>{formatPrice(unitPrice)}</span>
+          <span className="font-heading text-4xl font-bold">{formatPrice(unitPrice)}</span>
           {onSale && (
             <>
               <span className="text-lg text-muted-foreground line-through">{formatPrice(basePrice)}</span>

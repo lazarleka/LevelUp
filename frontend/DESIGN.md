@@ -116,10 +116,12 @@ iskačući prozor u obliku DVD kutije (`GameCaseDialog`). Katalog iza ostaje zat
 - **Otvaranje** (650 ms): korica se u 3D okrene oko šarke i otvori ulevo, i na telefonu i na desktopu
 - **Disk** (300 ms, zatim stalno): disk sa coverom igre kao nalepnicom, rupom u sredini i sjajem
   izroni u ležište i polako se vrti (jedan krug na 8 s); sjaj stoji, nalepnica se okreće
-- Levo: crna plastika sa ležištem i diskom. Desno: sve informacije sa stranice igre
+- Desktop: levo crna plastika sa ležištem i diskom, desno sve informacije sa stranice igre
   (izbor platforme i izdanja, cena, „Add to cart“, opis), sa skrolovanjem
-- Na telefonu su polovine uže (po 47% ekrana) i više od prave kutije (do 78% visine ekrana),
-  a informacije su u kompaktnom prikazu: manji naslov, cena i dugmad
+- **Telefon (ispod 768 px)**: ista animacija, ali otvorena kutija je manja i stoji u gornjem delu
+  ekrana; u desnoj polovini je umetak sa coverom. Informacije izađu kao **panel odozdo** preko cele
+  širine (62% visine ekrana). Ručica na vrhu: klik ili povlačenje nagore proširi panel na 90%,
+  povlačenje nadole ga skupi, a iz skupljenog stanja zatvori kutiju
 - Zatvaranje: X, Esc ili klik van kutije; animacija ide unazad i kutija se vrati na svoje mesto
 - Ctrl/Cmd-klik i dalje otvara punu stranicu igre u novom tabu; stranica `/games/:id` ostaje za
   linkove iz korpe

@@ -1,118 +1,123 @@
-# LevelUp: product spec
+# LevelUp: specifikacija proizvoda
 
-What we are building and when it counts as done. Design lives in
-[frontend/DESIGN.md](frontend/DESIGN.md), data and API in [docs/entities.md](docs/entities.md),
-rules for coding agents in [AGENTS.md](AGENTS.md).
+Šta pravimo i kada se smatra da je gotovo. Dizajn je u
+[frontend/DESIGN.md](frontend/DESIGN.md), podaci i API u [docs/entities.md](docs/entities.md),
+pravila za AI agente u [AGENTS.md](AGENTS.md).
 
-## Goal
-LevelUp is an online shop for **new** video games. A gamer (15–30, mostly on a phone) finds a
-game quickly, sees the price and platforms, and puts it in the cart.
+## Cilj
+LevelUp je online prodavnica **novih** video igara. Gejmer (15–30 godina, uglavnom na telefonu)
+brzo pronalazi igru, vidi cenu i platforme i stavlja je u korpu.
 
 ## MVP
-One main flow that must work end to end before anything else:
+Jedan glavni tok koji mora da radi od početka do kraja pre bilo čega drugog:
 
-> **Find a game → open it → add it to the cart.**
+> **Pronađi igru → otvori je → dodaj u korpu.**
 
-"Works end to end" means: real mock data through `api/`, loading, empty and error states, and
-it looks right at 375 px and 1440 px.
+„Radi od početka do kraja“ znači: pravi mock podaci kroz `api/`, stanja učitavanja, prazne liste
+i greške, i stranica izgleda kako treba na 375 px i 1440 px.
 
-## Screens
+## Ekrani
 
-| # | Screen | Route | MVP |
+| # | Ekran | Ruta | MVP |
 |---|---|---|---|
-| 1 | Home | `/` | yes |
-| 2 | Catalog (list + filter) | `/games` | yes |
-| 3 | Game detail | `/games/:id` | yes |
-| 4 | Cart | `/cart` | yes |
-| 5 | Sign in | `/sign-in` | yes |
-| 6 | Game form (create / edit, admin) | `/admin/games/new`, `/admin/games/:id/edit` | yes, required by the workshop |
-| – | Not found | `*` | exists |
+| 1 | Početna | `/` | da |
+| 2 | Katalog (lista + filter) | `/games` | da |
+| 3 | Detalj igre | `/games/:id` | da |
+| 4 | Korpa | `/cart` | da |
+| 5 | Prijava | `/sign-in` | da |
+| 6 | Forma za igru (kreiranje / izmena, admin) | `/admin/games/new`, `/admin/games/:id/edit` | da, traži je radionica |
+| – | Stranica nije pronađena | `*` | postoji |
 
-Every screen shares the header: dark green bar with the LevelUp logo, a search field (icon on
-phone, field on desktop), the cart icon with the item count, and sign in / the user's name.
+Svi ekrani dele isti header: tamnozelena traka sa LevelUp logom, polje za pretragu (ikonica na
+telefonu, polje na desktopu), ikonica korpe sa brojem stavki i prijava / ime korisnika.
 
-### 1. Home
-- Three carousels: **New** (newest release date), **Best sellers** (by `soldCount`),
-  **On sale** (`discountPercent > 0`), 10 games each
-- Each carousel has a title, a "See all" link to the catalog with the matching sort or filter,
-  and ← → buttons
-- Arrows scroll by the number of visible boxes; the left arrow is disabled at the start, the
-  right one at the end. Touch swipe also scrolls
-- 2 boxes visible at 375 px, 5–6 at 1440 px
+### 1. Početna
+- Tri karusela: **Novo** (najnoviji datum izlaska), **Najprodavanije** (po `soldCount`),
+  **Na popustu** (`discountPercent > 0`), po 10 igara
+- Svaki karusel ima naslov, link „Prikaži sve“ ka katalogu sa odgovarajućim sortiranjem ili
+  filterom i dugmad ← →
+- Strelice pomeraju red za onoliko kutija koliko ih se vidi; leva strelica je onemogućena na
+  početku, desna na kraju. Na ekranu osetljivom na dodir radi i prevlačenje
+- 2 kutije se vide na 375 px, 5–6 na 1440 px
 
-**Done when:** all three rows load from `useGames`, arrows and swipe work, each row has its own
-loading skeleton and error message, and "See all" opens the catalog already filtered.
+**Gotovo kada:** sva tri reda se učitavaju preko `useGames`, strelice i prevlačenje rade, svaki
+red ima svoj skeleton za učitavanje i poruku o grešci, a „Prikaži sve“ otvara već filtriran
+katalog.
 
-### 2. Catalog
-- Grid of game boxes: 2 columns on phone, 3 on tablet, 5 on desktop
-- **Search** by name, with suggestions while typing (up to 5 games with a thumbnail, Enter or
-  click opens the game)
-- **Filters:** platform, genre, price range (min / max), max PEGI, on sale only, coming soon
-- **Sort:** newest (default), price ↑, price ↓, best rated, best selling
-- Active filters as chips above the grid, each with ✕, plus "Clear all"
-- Filters, search and sort live in the URL (`/games?platform=ps5&sort=price-asc`), so the page
-  can be shared and the back button works
-- Filters apply instantly; on phone they open in a bottom sheet, on desktop they sit in a sidebar
-- Result count ("12 games")
+### 2. Katalog
+- Mreža kutija igara: 2 kolone na telefonu, 3 na tabletu, 5 na desktopu
+- **Pretraga** po imenu, sa predlozima dok kucaš (do 5 igara sa sličicom; Enter ili klik otvara
+  igru)
+- **Filteri:** platforma, žanr, raspon cene (min / max), najviši PEGI, samo na popustu, uskoro
+  izlazi
+- **Sortiranje:** najnovije (podrazumevano), cena ↑, cena ↓, najbolje ocenjene, najprodavanije
+- Aktivni filteri kao „čipovi“ iznad mreže, svaki sa ✕, plus „Obriši sve“
+- Filteri, pretraga i sortiranje su u URL-u (`/games?platform=ps5&sort=price-asc`), pa se
+  stranica može podeliti i dugme „nazad“ radi
+- Filteri se primenjuju odmah; na telefonu se otvaraju u donjem panelu, na desktopu su u bočnoj
+  koloni
+- Broj rezultata („12 igara“)
 
-**Done when:** every filter and sort changes the grid, filters combine, the URL updates and
-restores the state on reload, empty result shows "No games match" with a "Clear filters" button.
+**Gotovo kada:** svaki filter i sortiranje menjaju mrežu, filteri se kombinuju, URL se ažurira i
+vraća stanje posle osvežavanja, a prazan rezultat prikazuje „Nijedna igra ne odgovara“ sa
+dugmetom „Obriši filtere“.
 
-### 3. Game detail
-- Large box art, title, publisher, genre, PEGI, release date, rating (stars + number)
-- **Platform picker** (only the game's platforms) and **edition picker** (Standard; Deluxe only
-  if `deluxePrice` exists)
-- Price for the chosen edition, old price struck through when on sale, "−20%" badge
-- "In stock" / "Out of stock"; coming soon games show "Pre-order · releases 19 Nov 2026"
-- **Add to cart** button (yellow, the main action), with a quantity of 1
-- Description
+### 3. Detalj igre
+- Velika slika kutije, naslov, izdavač, žanr, PEGI, datum izlaska, ocena (zvezdice + broj)
+- **Izbor platforme** (samo platforme te igre) i **izbor izdanja** (Standard; Deluxe samo ako
+  postoji `deluxePrice`)
+- Cena za izabrano izdanje, stara cena precrtana kad je na popustu, oznaka „−20%“
+- „Na stanju“ / „Nema na stanju“; igre koje tek izlaze prikazuju „Pre-order · izlazi 19. nov 2026“
+- Dugme **Dodaj u korpu** (žuto, glavna akcija), sa količinom 1
+- Opis
 
-**Done when:** changing edition changes the price, adding works and the header counter bounces,
-an unknown id shows a not found message, out of stock disables the button.
+**Gotovo kada:** promena izdanja menja cenu, dodavanje radi i brojač u headeru „poskoči“,
+nepostojeći id prikazuje poruku da igra nije pronađena, a kad igre nema na stanju dugme je
+onemogućeno.
 
-### 4. Cart
-- One row per item: thumbnail, title, platform, edition, unit price, quantity stepper (1–10),
-  line total, remove button
-- Order total at the bottom; on phone the total and the "Checkout" button stick to the bottom
-- Empty cart: message and a "Browse games" button
-- "Checkout" is visible but leads to a "coming soon" note (checkout is not in the MVP)
+### 4. Korpa
+- Jedan red po stavci: sličica, naslov, platforma, izdanje, cena po komadu, birač količine
+  (1–10), ukupno za stavku, dugme za uklanjanje
+- Ukupna cena na dnu; na telefonu ukupna cena i dugme „Plaćanje“ ostaju zalepljeni za dno ekrana
+- Prazna korpa: poruka i dugme „Pogledaj igre“
+- „Plaćanje“ se vidi, ali vodi na poruku „uskoro“ (plaćanje nije deo MVP-a)
 
-**Done when:** quantity and remove update the total immediately, the header counter matches,
-the empty state shows after removing the last item.
+**Gotovo kada:** količina i uklanjanje odmah menjaju ukupnu cenu, brojač u headeru se poklapa, a
+posle uklanjanja poslednje stavke prikazuje se prazno stanje.
 
-### 5. Sign in
-- Email and password, validated with zod (valid email, password at least 6 characters)
-- Mock: any email from the users mock signs in, the password is not checked
-- Wrong email shows "No account with that email" under the form
-- After sign in the user returns to the page they came from
+### 5. Prijava
+- Email i lozinka, validacija preko zod-a (ispravan email, lozinka od najmanje 6 karaktera)
+- Mock: prijava radi sa bilo kojim emailom iz mock korisnika, lozinka se ne proverava
+- Pogrešan email prikazuje „Ne postoji nalog sa tim emailom“ ispod forme
+- Posle prijave korisnik se vraća na stranicu sa koje je došao
 
-**Done when:** sign in and sign out work, the header shows the user's name, and protected
-actions redirect to sign in and back.
+**Gotovo kada:** prijava i odjava rade, header prikazuje ime korisnika, a zaštićene akcije vode na
+prijavu i nazad.
 
-### 6. Game form (admin)
-- Fields of `NewGame` from `docs/entities.md`, validated with zod and react-hook-form
-- Same form for create and edit; edit is pre-filled
-- Only visible to a signed-in `admin`; others are redirected to sign in
-- On save: back to the game detail page
+### 6. Forma za igru (admin)
+- Polja iz `NewGame` u `docs/entities.md`, validacija preko zod-a i react-hook-form
+- Ista forma za kreiranje i izmenu; kod izmene su polja već popunjena
+- Vidi je samo prijavljeni `admin`; ostali se preusmeravaju na prijavu
+- Posle čuvanja: povratak na stranicu detalja igre
 
-**Done when:** a created game appears in the catalog, an edit is visible on the detail page,
-validation messages are shown next to the fields.
+**Gotovo kada:** kreirana igra se pojavljuje u katalogu, izmena se vidi na stranici detalja, a
+poruke validacije stoje pored polja.
 
-## Rules across the app
-- Adding to the cart requires sign in. A signed-out user who clicks "Add to cart" goes to
-  `/sign-in` and comes back to the same game
-- Prices are shown as `€59.49`; the discount is applied before the price is shown
-- All UI copy is in English
-- Every image has `alt`, every control works with the keyboard, focus is visible
+## Pravila u celoj aplikaciji
+- Za dodavanje u korpu potrebna je prijava. Neprijavljen korisnik koji klikne „Dodaj u korpu“
+  ide na `/sign-in` i vraća se na istu igru
+- Cene se prikazuju kao `€59.49`; popust se uračunava pre prikaza cene
+- Sav tekst u interfejsu je na engleskom
+- Svaka slika ima `alt`, svaka kontrola radi sa tastaturom, fokus je vidljiv
 
-## Later (not before the MVP works)
-Ratings and reviews, "You might also like", wishlist, pre-order details, checkout and
-"My orders", sign up.
+## Kasnije (ne pre nego što MVP proradi)
+Ocene i recenzije, „Možda ti se sviđa i…“, lista želja, detalji pre-ordera, plaćanje i „Moje
+porudžbine“, registracija.
 
-## Out of scope
-Used games, payments, real shipping, multiple currencies, a dark theme.
+## Van opsega
+Polovne igre, plaćanje karticom, prava dostava, više valuta, tamna tema.
 
-## Open questions
-Decided by Claude for now; change them here if the team disagrees.
-- Should a signed-out user be able to fill a cart (guest cart)? Currently: no, sign in first
-- Should checkout create a mock order in the MVP? Currently: no, "coming soon"
+## Otvorena pitanja
+Za sada ih je odlučio Claude; promenite ih ovde ako se tim ne slaže.
+- Da li neprijavljen korisnik može da puni korpu (korpa za goste)? Trenutno: ne, prvo prijava
+- Da li plaćanje u MVP-u pravi mock porudžbinu? Trenutno: ne, „uskoro“

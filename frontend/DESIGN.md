@@ -1,135 +1,135 @@
-# LevelUp: design
+# LevelUp: dizajn
 
-How LevelUp looks and feels. What each screen does and when it is done is in
-[../SPEC.md](../SPEC.md); this file only decides the look.
+Kako LevelUp izgleda i kakav je osećaj. Šta svaki ekran radi i kada je gotov piše u
+[../SPEC.md](../SPEC.md); ovaj fajl određuje samo izgled.
 
-## Product
-LevelUp is an online shop for new video games: customers browse the catalog, find a game by
-name, platform or genre, and add it to the cart.
+## Proizvod
+LevelUp je online prodavnica novih video igara: kupci pregledaju katalog, pronalaze igru po
+imenu, platformi ili žanru i dodaju je u korpu.
 
-## Users
-Gamers aged 15–30. Most of them shop from a phone, so every screen is designed **mobile first**
-(375 px) and then expanded to desktop (1440 px).
+## Korisnici
+Gejmeri od 15 do 30 godina. Većina kupuje sa telefona, pa se svaki ekran pravi **mobile first**
+(375 px) i zatim proširuje na desktop (1440 px).
 
-## Tone
-Energetic, fast, reliable. It should feel like walking past a shelf of game boxes, not like
-reading a spreadsheet.
+## Ton
+Energičan, brz, pouzdan. Treba da deluje kao šetnja pored police sa kutijama igara, a ne kao
+čitanje tabele.
 
-## Colors
-Light theme. Dark green takes the role of black: it is the brand and the text color. Yellow is
-reserved for actions, so the "buy" button is always the most visible thing on a screen.
+## Boje
+Svetla tema. Tamnozelena preuzima ulogu crne: to je boja brenda i teksta. Žuta je rezervisana
+za akcije, tako da je dugme za kupovinu uvek najuočljivija stvar na ekranu.
 
-| Role | Color | Token | Used for |
+| Uloga | Boja | Token | Gde se koristi |
 |---|---|---|---|
-| Background | `#FFFFFF` | `background`, `card`, `popover` | page, cards, menus |
-| Text | `#164A41` | `foreground` | headings and body text |
-| Brand | `#164A41` with white text | `brand`, `brand-foreground` | header bar, footer |
-| Main action | `#F1B24A` with `#164A41` text | `primary`, `primary-foreground`, `ring` | "Add to cart", carousel arrows, sale badge, cart counter, focus ring |
-| Secondary | `#4D774E` with white text | `secondary`, `secondary-foreground` | platform badges, active filter chips |
-| Quiet text | `#4D774E` | `muted-foreground` | meta info, old price, helper text |
-| Soft green | `#9DC88D` | `highlight`, `highlight-foreground` | "In stock" label |
-| Soft green tints | from `#9DC88D` | `muted`, `accent` | skeletons, section backgrounds, hover on filters and menu items |
-| Lines | light grey-green | `border`, `input` | borders, input outlines |
-| Error | red, outside the palette | `destructive` | error messages and "Remove" only |
+| Pozadina | `#FFFFFF` | `background`, `card`, `popover` | stranica, kartice, meniji |
+| Tekst | `#164A41` | `foreground` | naslovi i tekst |
+| Brend | `#164A41` sa belim tekstom | `brand`, `brand-foreground` | traka headera, footer |
+| Glavna akcija | `#F1B24A` sa tekstom `#164A41` | `primary`, `primary-foreground`, `ring` | „Dodaj u korpu“, strelice karusela, oznaka popusta, brojač korpe, prsten fokusa |
+| Sekundarna | `#4D774E` sa belim tekstom | `secondary`, `secondary-foreground` | oznake platforme, aktivni filter-čipovi |
+| Tihi tekst | `#4D774E` | `muted-foreground` | dodatne informacije, stara cena, pomoćni tekst |
+| Meka zelena | `#9DC88D` | `highlight`, `highlight-foreground` | oznaka „Na stanju“ |
+| Svetle nijanse zelene | iz `#9DC88D` | `muted`, `accent` | skeletoni, pozadine sekcija, hover na filterima i stavkama menija |
+| Linije | svetla sivozelena | `border`, `input` | okviri, ivice polja |
+| Greška | crvena, van palete | `destructive` | samo poruke o grešci i „Ukloni“ |
 
-- Text on yellow is always dark green, never white (white on `#F1B24A` is not readable)
-- All text/background pairs above pass WCAG AA (4.5:1 or more)
-- Yellow is never decoration: no yellow headings, borders or backgrounds without an action
+- Tekst na žutoj je uvek tamnozelen, nikad beo (beli tekst na `#F1B24A` se ne čita)
+- Svi parovi tekst/pozadina iz tabele prolaze WCAG AA (4.5:1 ili više)
+- Žuta nikad nije ukras: bez žutih naslova, okvira ili pozadina ako tu nema akcije
 
-## Typography
-- **Rajdhani** (600, 700): headings, prices, the logo, carousel titles
-- **Inter** (400, 500, 600): everything else
-- Sizes (phone → desktop):
-  - Page title `text-3xl` → `md:text-4xl`, bold
-  - Section / carousel title `text-xl` → `md:text-2xl`, bold
-  - Game title in a box `text-base`, semibold, max 2 lines
-  - Price in a box `text-lg`, Rajdhani bold; on the detail page `text-3xl`
-  - Body `text-sm` → `md:text-base`; meta `text-xs`/`text-sm` in `muted-foreground`
-- At most two heading sizes per screen; text lines up to ~70 characters
+## Tipografija
+- **Rajdhani** (600, 700): naslovi, cene, logo, naslovi karusela
+- **Inter** (400, 500, 600): sve ostalo
+- Veličine (telefon → desktop):
+  - Naslov stranice `text-3xl` → `md:text-4xl`, bold
+  - Naslov sekcije / karusela `text-xl` → `md:text-2xl`, bold
+  - Naslov igre u kutiji `text-base`, semibold, najviše 2 reda
+  - Cena u kutiji `text-lg`, Rajdhani bold; na stranici detalja `text-3xl`
+  - Tekst `text-sm` → `md:text-base`; dodatne informacije `text-xs`/`text-sm` u `muted-foreground`
+- Najviše dve veličine naslova po ekranu; redovi teksta do ~70 karaktera
 
-## Layout and spacing
-- Content width `max-w-6xl`, side padding `px-4` (16 px) on phone, `md:px-6`
-- Breakpoints: base = phone (375), `sm` 640, `md` 768, `lg` 1024 (desktop layout), 1440 checked
-- Between sections `py-12` or more; inside groups `gap-2` to `gap-4`
-- Spacing only from the scale 1, 2, 3, 4, 6, 8, 12, 16
+## Raspored i razmaci
+- Širina sadržaja `max-w-6xl`, bočni razmak `px-4` (16 px) na telefonu, `md:px-6`
+- Breakpointi: osnova = telefon (375), `sm` 640, `md` 768, `lg` 1024 (desktop raspored), proverava se i 1440
+- Između sekcija `py-12` ili više; unutar grupa `gap-2` do `gap-4`
+- Razmaci samo sa skale 1, 2, 3, 4, 6, 8, 12, 16
 
-## Shape
-- Radius 6 px (`--radius: 0.375rem`); buttons, inputs, cards use `rounded-md`/`rounded-lg`
-- Game boxes and the sale badge use `rounded-sm`, sharper like a real case
-- Thin `border` lines instead of shadows. A shadow only on floating layers (menus, the filter
-  sheet, sticky cart total)
+## Oblik
+- Radius 6 px (`--radius: 0.375rem`); dugmad, polja i kartice koriste `rounded-md`/`rounded-lg`
+- Kutije igara i oznaka popusta koriste `rounded-sm`, oštrije, kao prava kutija
+- Tanke `border` linije umesto senki. Senka samo na slojevima koji lebde (meniji, panel sa
+  filterima, zalepljena ukupna cena u korpi)
 
 ## Header
-- Full-width dark green bar (`bg-brand`), white logo "LevelUp" in Rajdhani bold
-- Phone: logo left; search icon, cart icon with count, user icon right. Search opens as a
-  full-width field under the bar
-- Desktop: logo, Games link, search field in the middle (`max-w-md`), cart and sign in right
-- Cart count: small yellow circle with dark green number; bounces once when an item is added
+- Tamnozelena traka preko cele širine (`bg-brand`), beli logo „LevelUp“ u Rajdhani bold
+- Telefon: logo levo; ikonice pretrage, korpe sa brojem i korisnika desno. Pretraga se otvara kao
+  polje preko cele širine ispod trake
+- Desktop: logo, link Games, polje za pretragu u sredini (`max-w-md`), korpa i prijava desno
+- Brojač korpe: mali žuti krug sa tamnozelenim brojem; jednom „poskoči“ kad se doda stavka
 
-## Game box (the main UI element)
-- Every game is shown as its full box: portrait cover art in a **3:4** ratio
-- Under the box: title (max 2 lines), platform badges, price; old price struck through when on
-  sale; "−20%" badge in the top left corner of the box
-- Coming soon games get a "Pre-order" label instead of the sale badge
-- Hover (desktop): the box lifts 4 px and its border turns yellow; the whole box is a link to the
-  game
-- Focus (keyboard): visible yellow ring
-- Same component in carousels and the catalog grid
+## Kutija igre (glavni element interfejsa)
+- Svaka igra se prikazuje kao cela kutija: uspravna slika omota u odnosu **3:4**
+- Ispod kutije: naslov (najviše 2 reda), oznake platformi, cena; stara cena precrtana kad je na
+  popustu; oznaka „−20%“ u gornjem levom uglu kutije
+- Igre koje tek izlaze dobijaju oznaku „Pre-order“ umesto oznake popusta
+- Hover (desktop): kutija se podigne 4 px i okvir postane žut; cela kutija je link ka igri
+- Fokus (tastatura): vidljiv žuti prsten
+- Ista komponenta u karuselima i u mreži kataloga
 
-## Carousel
-- Title left, "See all" link and ← → buttons right
-- Arrow buttons: 40 px square, yellow (`primary`), disabled at the ends with 50% opacity
-- 2 boxes visible on phone (with a peek of the third), 5–6 on desktop; scroll snaps to a box
-- Swipe on touch, arrows on all sizes
+## Karusel
+- Naslov levo, link „Prikaži sve“ i dugmad ← → desno
+- Dugmad sa strelicama: kvadrat 40 px, žuta (`primary`), onemogućena na krajevima sa 50% providnosti
+- Na telefonu se vide 2 kutije (i deo treće), na desktopu 5–6; skrolovanje se „lepi“ za kutiju
+- Prevlačenje na ekranu osetljivom na dodir, strelice na svim veličinama
 
-## Catalog
-- Phone: search field, then a row with "Filters (2)" button and the sort select; filters open in
-  a bottom sheet; grid of 2 columns
-- Desktop: filter sidebar (240 px) left, grid of 5 columns right; sort select above the grid
-- Active filters as `secondary` chips with ✕, plus "Clear all" as a text button
-- Result count above the grid in `muted-foreground`
+## Katalog
+- Telefon: polje za pretragu, zatim red sa dugmetom „Filteri (2)“ i izborom sortiranja; filteri
+  se otvaraju u donjem panelu; mreža od 2 kolone
+- Desktop: bočna kolona sa filterima (240 px) levo, mreža od 5 kolona desno; izbor sortiranja
+  iznad mreže
+- Aktivni filteri kao `secondary` čipovi sa ✕, plus „Obriši sve“ kao tekstualno dugme
+- Broj rezultata iznad mreže u `muted-foreground`
 
-## Game detail
-- Phone: box art on top (max 60% of the screen width, centered), then info, pickers, price, the
-  Add to cart button full width, description
-- Desktop: two columns, box art left (sticky), everything else right
-- Platform and edition pickers are toggle buttons (outlined; selected = `secondary`)
-- Add to cart: large `primary` button with a cart icon
+## Detalj igre
+- Telefon: slika kutije na vrhu (najviše 60% širine ekrana, centrirana), zatim informacije, izbor
+  platforme i izdanja, cena, dugme „Dodaj u korpu“ preko cele širine, opis
+- Desktop: dve kolone, slika kutije levo (zalepljena pri skrolovanju), sve ostalo desno
+- Izbor platforme i izdanja su toggle dugmad (sa okvirom; izabrano = `secondary`)
+- Dodaj u korpu: veliko `primary` dugme sa ikonicom korpe
 
-## Forms (sign in, game form)
-- One column, labels above inputs, `max-w-md` on sign in, `max-w-2xl` on the game form
-- Error text under the field in `destructive`, `text-sm`
-- Main button is `primary`; cancel is a `ghost` button
+## Forme (prijava, forma za igru)
+- Jedna kolona, labele iznad polja, `max-w-md` za prijavu, `max-w-2xl` za formu igre
+- Tekst greške ispod polja u `destructive`, `text-sm`
+- Glavno dugme je `primary`; otkazivanje je `ghost` dugme
 
-## States
-- **Loading:** skeletons with the same shape as the content (3:4 boxes, text lines), `bg-muted`
-- **Empty:** short message and one action ("Clear filters", "Browse games"), centered, an icon
-  from lucide in `muted-foreground`
-- **Error:** message in `destructive` and a "Try again" button
-- Buttons that are saving show a spinner and are disabled
+## Stanja
+- **Učitavanje:** skeletoni istog oblika kao sadržaj (kutije 3:4, redovi teksta), `bg-muted`
+- **Prazno:** kratka poruka i jedna akcija („Obriši filtere“, „Pogledaj igre“), centrirano, uz
+  ikonicu iz lucide u `muted-foreground`
+- **Greška:** poruka u `destructive` i dugme „Pokušaj ponovo“
+- Dugmad koja čuvaju podatke prikazuju spinner i onemogućena su
 
-## Interaction and motion
-- Box hover: lift and yellow border, 200 ms
-- Add to cart: counter bounce, 250 ms, plus a short toast "Added to cart"
-- Filters and sorting update the list immediately and are kept in the URL
-- All motion is 150–250 ms and turned off with `prefers-reduced-motion`
+## Interakcija i animacije
+- Hover na kutiji: podizanje i žuti okvir, 200 ms
+- Dodavanje u korpu: brojač „poskoči“, 250 ms, plus kratka poruka „Dodato u korpu“
+- Filteri i sortiranje odmah menjaju listu i čuvaju se u URL-u
+- Sve animacije traju 150–250 ms i isključuju se uz `prefers-reduced-motion`
 
-## Images
-- Box art in 3:4, `object-cover`, lazy loaded, with `alt="<title> box art"`
-- Placeholder images come from picsum for now; replace them with your own box art later
+## Slike
+- Slike kutija u odnosu 3:4, `object-cover`, lazy učitavanje, sa `alt="<title> box art"`
+- Za sada su placeholder slike sa picsum-a; kasnije ih zamenite pravim slikama kutija
 
-## Icons
-`lucide-react` only: `ShoppingCart`, `Search`, `User`, `ChevronLeft`, `ChevronRight`,
+## Ikonice
+Samo `lucide-react`: `ShoppingCart`, `Search`, `User`, `ChevronLeft`, `ChevronRight`,
 `SlidersHorizontal`, `X`, `Star`, `Trash2`, `Minus`, `Plus`.
 
-## References
-- GameStop: search suggestions, filter sidebar, platform and edition picker on the product page
-- Best Buy: yellow used only for the main action, clear price block with the old price struck
-  through
+## Reference
+- GameStop: predlozi u pretrazi, bočna kolona sa filterima, izbor platforme i izdanja na
+  stranici proizvoda
+- Best Buy: žuta samo za glavnu akciju, jasan blok sa cenom i precrtanom starom cenom
 
-## Don't
-- Gradients without a reason, emoji instead of icons, a "Welcome to…" hero
-- Everything in cards with shadows
-- White text on yellow, or yellow used as decoration
-- Landscape thumbnails for games: a game is always shown as its portrait box
-- More than two fonts
+## Ne raditi
+- Gradijente bez razloga, emoji umesto ikonica, „Dobro došli u…“ hero sekciju
+- Sve u karticama sa senkama
+- Beli tekst na žutoj, ili žutu kao ukras
+- Položene sličice za igre: igra se uvek prikazuje kao uspravna kutija
+- Više od dva fonta

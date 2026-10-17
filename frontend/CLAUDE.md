@@ -1,38 +1,38 @@
 # Frontend
 
 React 19 + TypeScript + Vite + Tailwind CSS v4 + shadcn/ui + React Router + TanStack Query.
-Design is described in @DESIGN.md, entities in @../docs/entities.md.
-All paths below are relative to `frontend/`.
+Dizajn je opisan u @DESIGN.md, entiteti u @../docs/entities.md.
+Sve putanje ispod su relativne u odnosu na `frontend/`.
 
 ## Feature-first
-Every feature (listings, users, messages…) lives in `src/features/<name>/` and has only the
-subfolders it needs: `api/`, `components/`, `hooks/`, `types.ts`. Features do not import each
-other; a route in `src/app/routes/` combines them on one page. Shared code goes to
-`src/components/ui` or `src/lib`, and only once at least two features use it.
-Dependency direction: shared code -> features -> app, never the other way around.
+Svaki feature (games, cart, users…) živi u `src/features/<name>/` i ima samo podfoldere koji mu
+trebaju: `api/`, `components/`, `hooks/`, `types.ts`. Feature-i ne uvoze jedni druge; ruta u
+`src/app/routes/` ih kombinuje na jednoj stranici. Deljeni kod ide u `src/components/ui` ili
+`src/lib`, i to tek kad ga koriste najmanje dva feature-a.
+Smer zavisnosti: deljeni kod -> feature-i -> app, nikad obrnuto.
 
-## Structure
-- `src/app/router.tsx`: all routes; `src/app/providers.tsx`: global providers (TanStack Query)
-- `src/app/routes/`: one file per route, only combines features and layout
-- `src/features/<name>/types.ts`: entity types of that feature
-- `src/features/<name>/api/<name>-api.ts`: the only place that fetches data (mock for now)
-- `src/features/<name>/api/use-<name>.ts`: TanStack Query hooks around the API
-- `src/features/<name>/components/`: components of that feature (e.g. `listing-card.tsx`)
-- `src/components/ui/`: shadcn/ui components, added with `pnpm dlx shadcn@latest add <name>` (run inside `frontend/`)
-- `src/components/layout/`: app layout (header, navigation)
-- `src/lib/`: `utils.ts` (`cn`) and `mock-db.ts` (mock database and delay)
+## Struktura
+- `src/app/router.tsx`: sve rute; `src/app/providers.tsx`: globalni provideri (TanStack Query)
+- `src/app/routes/`: jedan fajl po ruti, samo kombinuje feature-e i layout
+- `src/features/<name>/types.ts`: tipovi entiteta tog feature-a
+- `src/features/<name>/api/<name>-api.ts`: jedino mesto koje dohvata podatke (za sada mock)
+- `src/features/<name>/api/use-<name>.ts`: TanStack Query hookovi oko API-ja
+- `src/features/<name>/components/`: komponente tog feature-a (npr. `game-box.tsx`)
+- `src/components/ui/`: shadcn/ui komponente, dodaju se sa `pnpm dlx shadcn@latest add <name>` (pokreni u `frontend/`)
+- `src/components/layout/`: layout aplikacije (header, navigacija)
+- `src/lib/`: `utils.ts` (`cn`) i `mock-db.ts` (mock baza i kašnjenje)
 
-## Rules
-- A feature never imports another feature; `src/components` and `src/lib` never import from `src/features` or `src/app`
-- No barrel `index.ts` files: import the file directly (`@/features/listings/components/listings-list`)
-- Components and routes never call `*-api.ts` directly, only through a hook from `use-<name>.ts`
-- Use an existing component from `src/components/ui` first, only then create a new one
-- Colors, fonts and radius only from tokens in `src/index.css`, no hex values in components
-- Every list and data page has loading, empty and error states
-- No `any` and no `!` (non-null assertion)
-- If you are not sure how a library API works (Tailwind v4, React Router 8, TanStack Query 5), check the docs via Context7, do not guess.
+## Pravila
+- Feature nikad ne uvozi drugi feature; `src/components` i `src/lib` nikad ne uvoze iz `src/features` ili `src/app`
+- Bez barrel `index.ts` fajlova: uvozi fajl direktno (`@/features/games/components/games-grid`)
+- Komponente i rute nikad ne pozivaju `*-api.ts` direktno, samo preko hooka iz `use-<name>.ts`
+- Prvo koristi postojeću komponentu iz `src/components/ui`, tek onda pravi novu
+- Boje, fontovi i radius samo iz tokena u `src/index.css`, bez hex vrednosti u komponentama
+- Svaka lista i stranica sa podacima ima stanja učitavanja, prazne liste i greške
+- Bez `any` i bez `!` (non-null assertion)
+- Ako nisi siguran kako radi API neke biblioteke (Tailwind v4, React Router 8, TanStack Query 5), proveri dokumentaciju preko Context7, nemoj da pogađaš.
 
-## Done when
-- `pnpm typecheck` and `pnpm lint` pass
-- The page was opened with Playwright MCP and screenshots at 375 px and 1440 px match DESIGN.md
-- No errors in the browser console
+## Gotovo kada
+- `pnpm typecheck` i `pnpm lint` prolaze
+- Stranica je otvorena preko Playwright MCP-a i screenshotovi na 375 px i 1440 px odgovaraju DESIGN.md
+- Nema grešaka u konzoli browsera

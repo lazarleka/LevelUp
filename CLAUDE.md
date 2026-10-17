@@ -1,30 +1,32 @@
 # LevelUp
 
-An online shop for new video games, built mobile first for gamers aged 15–30: browse the
-catalog, search and filter games by platform and genre, open a game and add it to the cart.
+Online prodavnica novih video igara, pravljena mobile first za gejmere od 15 do 30 godina:
+pregled kataloga, pretraga i filtriranje igara po platformi i žanru, otvaranje igre i dodavanje
+u korpu.
 
-MVP: find a game → open it → add it to the cart. Screens and "done when" for each are in
-@SPEC.md, the look in @frontend/DESIGN.md; features under "Later" wait until the MVP works end
-to end. `AGENTS.md` holds the same rules for other coding agents; keep the two in sync.
+MVP: pronađi igru → otvori je → dodaj u korpu. Ekrani i „gotovo kada“ za svaki su u @SPEC.md,
+izgled u @frontend/DESIGN.md; funkcionalnosti pod „Kasnije“ čekaju dok MVP ne proradi od početka
+do kraja. `AGENTS.md` sadrži ista pravila za druge AI agente; ova dva fajla drži usklađenim.
 
-This is a monorepo: one repository for the whole app.
-- `frontend/`: React app (Workshop 3). Details in @frontend/CLAUDE.md
-- `backend/`: API, database and auth (next workshop)
-- `docs/entities.md`: entities and the API contract shared by frontend and backend
+Ovo je monorepo: jedan repozitorijum za celu aplikaciju.
+- `frontend/`: React aplikacija (Radionica 3). Detalji u @frontend/CLAUDE.md
+- `backend/`: API, baza i autentifikacija (sledeća radionica)
+- `docs/entities.md`: entiteti i API ugovor koji dele frontend i backend
 
-## Language
-All code, identifiers, comments, commit messages, docs and UI copy are in English.
-You may talk to me in any language.
+## Jezik
+Kod, nazivi, komentari, commit poruke, `docs/entities.md` i tekst u interfejsu su na engleskom.
+Projektna dokumentacija (`SPEC.md`, `AGENTS.md`, `CLAUDE.md`, `DESIGN.md`) je na srpskom.
+Sa mnom možeš da pričaš na bilo kom jeziku.
 
-## Commands (run from the repo root)
-- `pnpm install`: installs dependencies for every package in the workspace
-- `pnpm dev`: frontend dev server at http://localhost:5173
-- `pnpm typecheck`: TypeScript check
-- `pnpm lint`: oxlint and the boundary check between features
-- `pnpm build`: production build
-- `pnpm format`: Prettier formats `frontend/src/`
+## Komande (pokreću se iz korena repoa)
+- `pnpm install`: instalira zavisnosti za sve pakete u workspace-u
+- `pnpm dev`: frontend dev server na http://localhost:5173
+- `pnpm typecheck`: TypeScript provera
+- `pnpm lint`: oxlint i provera granica između feature-a
+- `pnpm build`: produkcijski build
+- `pnpm format`: Prettier formatira `frontend/src/`
 
-## Working in the monorepo
-- One change that touches frontend and backend goes in one commit or pull request
-- When an entity changes, update `docs/entities.md` in the same change
-- Run commands from the root; scripts are forwarded with `pnpm --filter <package>`
+## Rad u monorepou
+- Jedna izmena koja dira i frontend i backend ide u jedan commit ili pull request
+- Kad se entitet promeni, ažuriraj `docs/entities.md` u istoj izmeni
+- Komande se pokreću iz korena; skripte se prosleđuju sa `pnpm --filter <package>`

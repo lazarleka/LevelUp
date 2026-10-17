@@ -109,22 +109,27 @@ slajdere.
 - Tehnička napomena: bez `z-index` na karticama, jer u Chromeu poravna 3D prsten u ravan
 
 ## Kutija igre (otvaranje igre)
-Klik na igru u katalogu ili na glavnu igru u Best sellers ne vodi na stranicu, nego otvara
-iskačući prozor u obliku DVD kutije (`GameCaseDialog`). Katalog iza ostaje zatamnjen, a adresa se ne menja.
+Klik na igru u katalogu, na glavnu igru u Best sellers ili na omot/naziv igre u korpi otvara
+iskačući prozor u obliku DVD kutije (`GameCaseDialog`). Stranica iza ostaje zatamnjena, a adresa se ne menja.
 - **Izlet** (450 ms): zatvorena kutija sa coverom krene sa mesta igre na koju je kliknuto i
   odleti na sredinu ekrana
 - **Otvaranje** (650 ms): korica se u 3D okrene oko šarke i otvori ulevo, i na telefonu i na desktopu
-- **Disk** (300 ms, zatim stalno): disk sa coverom igre kao nalepnicom, rupom u sredini i sjajem
-  izroni u ležište i polako se vrti (jedan krug na 8 s); sjaj stoji, nalepnica se okreće
+- **Disk** je učitan i vidljiv u ležištu od početka otvaranja, bez dodatnog čekanja ili postepenog
+  pojavljivanja. Kada se korica otvori, disk sa coverom igre kao nalepnicom počne polako da se
+  vrti (jedan krug na 8 s); sjaj i centralni držač stoje, nalepnica se okreće.
+- Kutija ima modelovanu debljinu: prednju, zadnju i četiri bočne površine, blago zakrenute
+  polovine, reljefni hrbat sa tri šarke i uvučeno ležište diska sa četiri držača. Sive ivice,
+  odsjaji i senke ističu plastične površine, u okviru postojeće crno-bele palete.
 - Desktop: levo crna plastika sa ležištem i diskom, desno sve informacije sa stranice igre
-  (izbor platforme i izdanja, cena, „Add to cart“, opis), sa skrolovanjem
+  (izbor platforme i izdanja, cena, „Add to cart“, opis), vidljive zajedno bez skrolovanja.
+  Veća kutija i kompaktan raspored informacija smanjuju praznine; platforma i izdanje su u dve kolone.
 - **Telefon (ispod 768 px)**: ista animacija, ali otvorena kutija je manja i stoji u gornjem delu
   ekrana; u desnoj polovini je umetak sa coverom. Informacije izađu kao **panel odozdo** preko cele
-  širine (62% visine ekrana). Ručica na vrhu: klik ili povlačenje nagore proširi panel na 90%,
-  povlačenje nadole ga skupi, a iz skupljenog stanja zatvori kutiju
+  širine. Panel dobija visinu prema celom sadržaju, bez unutrašnjeg skrolovanja ili proširivanja.
+  Prostor za model kutije prilagođava se izmerenoj visini panela.
 - Zatvaranje: X, Esc ili klik van kutije; animacija ide unazad i kutija se vrati na svoje mesto
-- Ctrl/Cmd-klik i dalje otvara punu stranicu igre u novom tabu; stranica `/games/:id` ostaje za
-  linkove iz korpe
+- Ctrl/Cmd-klik i dalje otvara punu stranicu igre u novom tabu; stranica `/games/:id` ostaje
+  dostupna preko direktnih linkova.
 - Uz `prefers-reduced-motion` kutija se samo pojavi, bez leta i vrtenja
 - Pozadina: katalog iza je zatamnjen i zamućen (`bg-brand/75` + blur). Desna strana kutije koristi
   tamne tokene iz `.theme-case-dark` (tamnosiva podloga, svetao tekst)

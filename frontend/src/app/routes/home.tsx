@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Plus, SlidersHorizontal } from 'lucide-react'
-import { Link, useLocation } from 'react-router'
+import { Link, useLocation, useSearchParams } from 'react-router'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -13,13 +13,17 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { useGameActions } from '@/app/use-game-actions'
 import { ActiveFilterChips } from '@/features/games/components/active-filter-chips'
+import { GameCaseDialog } from '@/features/games/components/game-case-dialog'
+import type { CaseBackdrop } from '@/features/games/components/game-case-dialog'
 import { GameSearch } from '@/features/games/components/game-search'
 import { GameShowcase } from '@/features/games/components/game-showcase'
 import { GameSortSelect } from '@/features/games/components/game-sort-select'
 import { GamesFilters } from '@/features/games/components/games-filters'
 import { GamesGrid } from '@/features/games/components/games-grid'
 import { countActiveFilters, useGameFilters } from '@/features/games/hooks/use-game-filters'
+import type { Game } from '@/features/games/types'
 import { useCurrentUser } from '@/features/users/api/use-users'
 
 // The shop in one page: best sellers carousel on top, the full catalog with search and filters below.
@@ -28,6 +32,13 @@ export function Home() {
   const activeCount = countActiveFilters(filters)
   const { data: user } = useCurrentUser()
   const { hash } = useLocation()
+  const { renderAction, adminActions } = useGameActions()
+  const [opened, setOpened] = useState<{ game: Game; origin: DOMRect } | null>(null)
+  const openGame = (game: Game, origin: DOMRect) => setOpened({ game, origin })
+  // TEMPORARY: ?caseBg=dark|cover|light to compare backdrops; remove once the team picks one.
+  const [params] = useSearchParams()
+  const caseBg = params.get('caseBg')
+  const backdrop: CaseBackdrop = caseBg === 'cover' || caseBg === 'light' ? caseBg : 'dark'
 
   // The header search icon links to /#catalog; jump straight to the catalog.
   useEffect(() => {
@@ -40,7 +51,7 @@ export function Home() {
     <div className="flex flex-col gap-12">
       <h1 className="sr-only">LevelUp: new games for every platform</h1>
 
-      <GameShowcase title="Best sellers" filters={{ sort: 'best-selling' }} />
+      <GameShowcase title="Best sellers" filters={{ sort: 'best-selling' }} onOpenGame={openGame} />
 
       <section id="catalog" aria-labelledby="catalog-title" className="flex scroll-mt-4 flex-col gap-6">
         <div className="flex items-center justify-between gap-4">
@@ -105,8 +116,16 @@ export function Home() {
 
         <ActiveFilterChips filters={filters} onChange={setFilters} onClear={clearFilters} />
 
-        <GamesGrid filters={filters} onClearFilters={clearFilters} />
+        <GamesGrid filters={filters} onClearFilters={clearFilters} onOpenGame={openGame} />
       </section>
+      <GameCaseDialog
+        game={opened?.game ?? null}
+        originRect={opened?.origin ?? null}
+        onClosed={() => setOpened(null)}
+        renderAction={renderAction}
+        adminActions={adminActions}
+        backdrop={backdrop}
+      />
     </div>
   )
 }

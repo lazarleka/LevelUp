@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+import type { MouseEvent } from 'react'
 import { Link } from 'react-router'
 
 import { Badge } from '@/components/ui/badge'
@@ -7,22 +9,33 @@ import type { Game } from '../types'
 
 type GameBoxProps = {
   game: Game
+  /** Opens the game in place (the case dialog) instead of going to its page */
+  onOpen?: (game: Game, origin: DOMRect) => void
 }
 
 const formatPrice = (value: number) => `€${value.toFixed(2)}`
 
 // A game shown as its full portrait box, like on a shop shelf (see DESIGN.md).
-export function GameBox({ game }: GameBoxProps) {
+export function GameBox({ game, onOpen }: GameBoxProps) {
+  const boxRef = useRef<HTMLDivElement>(null)
   const price = finalPrice(game.price, game.discountPercent)
   const onSale = game.discountPercent > 0
   const comingSoon = isComingSoon(game)
 
+  const onClick = (event: MouseEvent) => {
+    // Ctrl/Cmd/Shift-click still opens the full page in a new tab or window.
+    if (!onOpen || !boxRef.current || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
+    event.preventDefault()
+    onOpen(game, boxRef.current.getBoundingClientRect())
+  }
+
   return (
     <Link
       to={`/games/${game.id}`}
+      onClick={onClick}
       className="group flex flex-col gap-2 rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
     >
-      <div className="relative aspect-[3/4] [perspective:900px] [perspective-origin:50%_70%]">
+      <div ref={boxRef} className="relative aspect-[3/4] [perspective:900px] [perspective-origin:50%_70%]">
         <div className="absolute inset-2 [--case-depth:clamp(10px,1.2vw,18px)] [transform:rotateY(-16deg)] [transform-style:preserve-3d] transition-transform duration-300 ease-out group-hover:[transform:translateY(-8px)_rotateY(-24deg)] group-focus-visible:[transform:translateY(-8px)_rotateY(-24deg)] motion-reduce:transition-none motion-reduce:group-hover:[transform:rotateY(-16deg)] motion-reduce:group-focus-visible:[transform:rotateY(-16deg)]">
           <div
             aria-hidden="true"

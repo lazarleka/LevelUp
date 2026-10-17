@@ -108,6 +108,24 @@ slajdere.
 - Uz `prefers-reduced-motion` nema automatskog okretanja ni animacije prelaza
 - Tehnička napomena: bez `z-index` na karticama, jer u Chromeu poravna 3D prsten u ravan
 
+## Kutija igre (otvaranje igre)
+Klik na igru u katalogu ili na glavnu igru u Best sellers ne vodi na stranicu, nego otvara
+iskačući prozor u obliku DVD kutije (`GameCaseDialog`). Katalog iza ostaje zatamnjen, a adresa se ne menja.
+- **Izlet** (450 ms): zatvorena kutija sa coverom krene sa mesta igre na koju je kliknuto i
+  odleti na sredinu ekrana
+- **Otvaranje** (650 ms): korica se u 3D okrene oko šarke i otvori ulevo (na telefonu nagore)
+- **Disk** (300 ms, zatim stalno): disk sa coverom igre kao nalepnicom, rupom u sredini i sjajem
+  izroni u ležište i polako se vrti (jedan krug na 8 s); sjaj stoji, nalepnica se okreće
+- Levo/gore: crna plastika sa ležištem i diskom. Desno/dole: sve informacije sa stranice igre
+  (izbor platforme i izdanja, cena, „Add to cart“, opis), sa skrolovanjem
+- Zatvaranje: X, Esc ili klik van kutije; animacija ide unazad i kutija se vrati na svoje mesto
+- Ctrl/Cmd-klik i dalje otvara punu stranicu igre u novom tabu; stranica `/games/:id` ostaje za
+  linkove iz korpe
+- Uz `prefers-reduced-motion` kutija se samo pojavi, bez leta i vrtenja
+- Pozadina (privremeno bira se preko `?caseBg=`): `dark` tamna zamućena (podrazumevano), `cover`
+  zamućen uvećan cover igre, `light` svetlosiva. Za tamnu i cover varijantu desna strana koristi
+  tamne tokene iz `.theme-case-dark`
+
 ## Katalog
 - Telefon: polje za pretragu, zatim red sa dugmetom „Filters“ i izborom sortiranja; mreža od 2 kolone
 - Desktop: pretraga levo, „Filters“ i sortiranje desno u istom redu; mreža od 5 kolona preko cele

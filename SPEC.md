@@ -61,6 +61,9 @@ sortiranje menjaju mrežu, filteri se kombinuju, URL se ažurira i vraća stanje
 a prazan rezultat prikazuje „Nijedna igra ne odgovara“ sa dugmetom „Obriši filtere“.
 
 ### 3. Detalj igre
+U shopu se igra otvara u iskačućoj DVD kutiji (vidi „Kutija igre“ u `frontend/DESIGN.md`): disk sa
+coverom se vrti levo, a desno je sve ispod navedeno. Puna stranica `/games/:id` ostaje za linkove
+iz korpe i direktne posete.
 - Velika slika kutije, naslov, izdavač, žanr, PEGI, datum izlaska, ocena (zvezdice + broj)
 - **Izbor platforme** (samo platforme te igre) i **izbor izdanja** (Standard; Deluxe samo ako
   postoji `deluxePrice`)

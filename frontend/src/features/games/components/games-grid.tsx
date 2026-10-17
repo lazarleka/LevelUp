@@ -4,18 +4,19 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { useGames } from '../api/use-games'
-import type { GameFilters } from '../types'
+import type { Game, GameFilters } from '../types'
 import { GameBox } from './game-box'
 
 type GamesGridProps = {
   filters: GameFilters
   onClearFilters?: () => void
+  onOpenGame?: (game: Game, origin: DOMRect) => void
 }
 
 const gridClass = 'grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
 
 // Catalog grid with all three states: loading, empty and error.
-export function GamesGrid({ filters, onClearFilters }: GamesGridProps) {
+export function GamesGrid({ filters, onClearFilters, onOpenGame }: GamesGridProps) {
   const { data: games, isLoading, error, refetch } = useGames(filters)
 
   if (isLoading) {
@@ -61,7 +62,7 @@ export function GamesGrid({ filters, onClearFilters }: GamesGridProps) {
       <ul className={gridClass}>
         {games.map((game) => (
           <li key={game.id}>
-            <GameBox game={game} />
+            <GameBox game={game} onOpen={onOpenGame} />
           </li>
         ))}
       </ul>

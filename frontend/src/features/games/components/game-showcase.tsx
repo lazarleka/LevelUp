@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 
 import { useGames } from '../api/use-games'
 import { finalPrice } from '../types'
-import type { GameFilters } from '../types'
+import type { Game, GameFilters } from '../types'
 
 type GameShowcaseProps = {
   title: string
@@ -16,6 +16,8 @@ type GameShowcaseProps = {
   limit?: number
   /** Time between automatic steps */
   intervalMs?: number
+  /** Clicking the front game opens it in place (the case dialog) */
+  onOpenGame?: (game: Game, origin: DOMRect) => void
 }
 
 /** Angle between neighbouring boxes on the ring. */
@@ -52,7 +54,7 @@ const arcScale = (distance: number) => Math.sqrt(Math.max(0, 1 - (distance / ARC
 // Every few seconds the next game comes to the front; hovering pauses it.
 // Each box sits at an angle from its distance to the front game; the one box that wraps from one
 // end of the list to the other does so behind the ring, without animation, so nothing flies across.
-export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: GameShowcaseProps) {
+export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000, onOpenGame }: GameShowcaseProps) {
   const { data, isLoading, error, refetch } = useGames(filters)
   const games = (data ?? []).slice(0, limit)
   const count = games.length
@@ -187,7 +189,12 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
 
               const onClick = (event: MouseEvent) => {
                 // A side box first turns to the front; the front box opens the game.
-                if (isFront) return
+                if (isFront) {
+                  if (!onOpenGame || event.metaKey || event.ctrlKey || event.shiftKey) return
+                  event.preventDefault()
+                  onOpenGame(game, event.currentTarget.getBoundingClientRect())
+                  return
+                }
                 event.preventDefault()
                 setTurn((t) => t + offset)
               }

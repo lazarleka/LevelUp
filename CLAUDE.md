@@ -1,6 +1,10 @@
-# [App name]
+# LevelUp
 
-[One sentence: what the app does and for whom.]
+An online shop for new video games, built mobile first for gamers aged 15–30: browse the
+catalog, search and filter games by platform and genre, open a game and add it to the cart.
+
+MVP: find a game → open it → add it to the cart. Scope, screens and visuals are in
+@frontend/DESIGN.md; features listed there under "Later" wait until the MVP works end to end.
 
 This is a monorepo: one repository for the whole app.
 - `frontend/`: React app (Workshop 3). Details in @frontend/CLAUDE.md

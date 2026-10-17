@@ -12,7 +12,7 @@ export function AppLayout() {
     <div className="min-h-dvh">
       <header className="border-b bg-card">
         <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-          <span className="font-heading text-lg font-bold text-primary">App name</span>
+          <span className="font-heading text-xl font-bold text-brand">LevelUp</span>
           <ul className="flex gap-6 text-sm">
             {links.map((link) => (
               <li key={link.to}>

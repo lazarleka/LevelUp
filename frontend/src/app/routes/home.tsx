@@ -1,18 +1,10 @@
-import { Link } from 'react-router'
-
-import { Button } from '@/components/ui/button'
+import { HomeShelves } from '@/app/routes/home-shelves'
 
 export function Home() {
   return (
-    <section className="py-16">
-      <h1 className="text-4xl font-bold tracking-tight md:text-5xl">Workshop 3 starter</h1>
-      <p className="mt-4 max-w-xl text-muted-foreground">
-        An empty React project ready for Claude Code. First step: let Claude interview you about the design
-        and write DESIGN.md.
-      </p>
-      <Button asChild className="mt-8">
-        <Link to="/games">Browse games</Link>
-      </Button>
-    </section>
+    <div className="flex flex-col gap-8">
+      <h1 className="text-3xl font-bold md:text-4xl">New games for every platform</h1>
+      <HomeShelves />
+    </div>
   )
 }

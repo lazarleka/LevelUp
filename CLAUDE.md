@@ -3,8 +3,9 @@
 An online shop for new video games, built mobile first for gamers aged 15–30: browse the
 catalog, search and filter games by platform and genre, open a game and add it to the cart.
 
-MVP: find a game → open it → add it to the cart. Scope, screens and visuals are in
-@frontend/DESIGN.md; features listed there under "Later" wait until the MVP works end to end.
+MVP: find a game → open it → add it to the cart. Screens and "done when" for each are in
+@SPEC.md, the look in @frontend/DESIGN.md; features under "Later" wait until the MVP works end
+to end. `AGENTS.md` holds the same rules for other coding agents; keep the two in sync.
 
 This is a monorepo: one repository for the whole app.
 - `frontend/`: React app (Workshop 3). Details in @frontend/CLAUDE.md

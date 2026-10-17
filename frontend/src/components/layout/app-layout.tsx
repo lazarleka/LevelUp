@@ -1,13 +1,6 @@
 import type { ReactNode } from 'react'
 import { Search } from 'lucide-react'
-import { Link, NavLink, Outlet } from 'react-router'
-
-import { cn } from '@/lib/utils'
-
-const links = [
-  { to: '/', label: 'Home' },
-  { to: '/games', label: 'Games' },
-]
+import { Link, Outlet } from 'react-router'
 
 type AppLayoutProps = {
   /** Right side of the header (e.g. the cart button); passed in by the router so layout stays feature-free */
@@ -22,24 +15,9 @@ export function AppLayout({ actions }: AppLayoutProps) {
           <Link to="/" className="font-heading text-2xl font-bold tracking-wide">
             LevelUp
           </Link>
-          <ul className="hidden gap-6 text-sm md:flex">
-            {links.map((link) => (
-              <li key={link.to}>
-                <NavLink
-                  to={link.to}
-                  end
-                  className={({ isActive }) =>
-                    cn('text-brand-foreground/80 hover:text-brand-foreground', isActive && 'font-semibold text-brand-foreground')
-                  }
-                >
-                  {link.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
           <div className="ml-auto flex items-center gap-2">
             <Link
-              to="/games"
+              to="/#catalog"
               aria-label="Search games"
               className="flex size-10 items-center justify-center rounded-md hover:bg-brand-foreground/10 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
             >

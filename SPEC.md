@@ -20,47 +20,43 @@ i greške, i stranica izgleda kako treba na 375 px i 1440 px.
 
 | # | Ekran | Ruta | MVP |
 |---|---|---|---|
-| 1 | Početna | `/` | da |
-| 2 | Katalog (lista + filter) | `/games` | da |
+| 1–2 | Početna sa katalogom (najprodavanije + lista + filter) | `/` (stari `/games` preusmerava ovde) | da |
 | 3 | Detalj igre | `/games/:id` | da |
 | 4 | Korpa | `/cart` | da |
 | 5 | Prijava | `/sign-in` | da |
 | 6 | Forma za igru (kreiranje / izmena, admin) | `/admin/games/new`, `/admin/games/:id/edit` | da, traži je radionica |
 | – | Stranica nije pronađena | `*` | postoji |
 
-Svi ekrani dele isti header: crna traka sa LevelUp logom, polje za pretragu (ikonica na
-telefonu, polje na desktopu), ikonica korpe sa brojem stavki i prijava / ime korisnika.
+Svi ekrani dele isti header: crna traka sa LevelUp logom, ikonica pretrage (vodi na katalog),
+ikonica korpe sa brojem stavki i prijava / ime korisnika.
 
-### 1. Početna
-- Tri karusela: **Novo** (najnoviji datum izlaska), **Najprodavanije** (po `soldCount`),
-  **Na popustu** (`discountPercent > 0`), po 10 igara
-- Svaki karusel ima naslov, link „Prikaži sve“ ka katalogu sa odgovarajućim sortiranjem ili
-  filterom i dugmad ← →
-- Strelice pomeraju red za onoliko kutija koliko ih se vidi; leva strelica je onemogućena na
-  početku, desna na kraju. Na ekranu osetljivom na dodir radi i prevlačenje
-- 2 kutije se vide na 375 px, 5–6 na 1440 px
+### 1–2. Početna sa katalogom
+Početna i katalog su jedna stranica: prvo najprodavanije igre, odmah ispod cela ponuda.
 
-**Gotovo kada:** sva tri reda se učitavaju preko `useGames`, strelice i prevlačenje rade, svaki
-red ima svoj skeleton za učitavanje i poruku o grešci, a „Prikaži sve“ otvara već filtriran
-katalog.
+**Najprodavanije (vrh stranice)**
+- Jedan karusel **Best sellers** (po `soldCount`), 10 igara, sa dugmadima ← → i linkom
+  „Prikaži sve“ koji sortira katalog ispod po prodaji
+- Strelice glatko pomeraju red za onoliko kutija koliko ih se vidi; leva strelica je onemogućena
+  na početku, desna na kraju. Na ekranu osetljivom na dodir radi i prevlačenje
+- 2 kutije se vide na 375 px, 6 na 1440 px
 
-### 2. Katalog
-- Mreža kutija igara: 2 kolone na telefonu, 3 na tabletu, 5 na desktopu
+**Katalog (ispod)**
+- Mreža kutija igara: 2 kolone na telefonu, 3 na manjem tabletu, 4 na tabletu, 5 na desktopu
 - **Pretraga** po imenu, sa predlozima dok kucaš (do 5 igara sa sličicom; Enter ili klik otvara
   igru)
-- **Filteri:** platforma, žanr, raspon cene (min / max), najviši PEGI, samo na popustu, uskoro
-  izlazi
+- **Filteri** u iskačućem panelu koji klizi sa desne strane (na svim veličinama ekrana), otvara se
+  dugmetom „Filters“ sa brojem aktivnih filtera: platforma, žanr, raspon cene (min / max), najviši
+  PEGI, samo na popustu, uskoro izlazi. Na dnu panela su „Clear all“ i „Show games“
 - **Sortiranje:** najnovije (podrazumevano), cena ↑, cena ↓, najbolje ocenjene, najprodavanije
 - Aktivni filteri kao „čipovi“ iznad mreže, svaki sa ✕, plus „Obriši sve“
-- Filteri, pretraga i sortiranje su u URL-u (`/games?platform=ps5&sort=price-asc`), pa se
-  stranica može podeliti i dugme „nazad“ radi
-- Filteri se primenjuju odmah; na telefonu se otvaraju u donjem panelu, na desktopu su u bočnoj
-  koloni
+- Filteri, pretraga i sortiranje su u URL-u (`/?platform=ps5&sort=price-asc`), pa se stranica
+  može podeliti i dugme „nazad“ radi
+- Filteri se primenjuju odmah, dok je panel otvoren
 - Broj rezultata („12 igara“)
 
-**Gotovo kada:** svaki filter i sortiranje menjaju mrežu, filteri se kombinuju, URL se ažurira i
-vraća stanje posle osvežavanja, a prazan rezultat prikazuje „Nijedna igra ne odgovara“ sa
-dugmetom „Obriši filtere“.
+**Gotovo kada:** karusel se učitava preko `useGames` i strelice i prevlačenje rade; svaki filter i
+sortiranje menjaju mrežu, filteri se kombinuju, URL se ažurira i vraća stanje posle osvežavanja,
+a prazan rezultat prikazuje „Nijedna igra ne odgovara“ sa dugmetom „Obriši filtere“.
 
 ### 3. Detalj igre
 - Velika slika kutije, naslov, izdavač, žanr, PEGI, datum izlaska, ocena (zvezdice + broj)

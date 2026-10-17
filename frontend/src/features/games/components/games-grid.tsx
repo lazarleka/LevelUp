@@ -12,7 +12,7 @@ type GamesGridProps = {
   onClearFilters?: () => void
 }
 
-const gridClass = 'grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+const gridClass = 'grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'
 
 // Catalog grid with all three states: loading, empty and error.
 export function GamesGrid({ filters, onClearFilters }: GamesGridProps) {

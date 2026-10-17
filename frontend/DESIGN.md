@@ -64,7 +64,7 @@ površina na ekranu (osim headera).
 - Crna traka preko cele širine (`bg-brand`), beli logo „LevelUp“ u Rajdhani bold
 - Telefon: logo levo; ikonice pretrage, korpe sa brojem i korisnika desno. Pretraga se otvara kao
   polje preko cele širine ispod trake
-- Desktop: logo, link Games, polje za pretragu u sredini (`max-w-md`), korpa i prijava desno
+- Desktop: logo levo; ikonica pretrage (vodi na katalog), korpa i prijava desno
 - Brojač korpe: mali beli krug sa crnim brojem; jednom „poskoči“ kad se doda stavka
 
 ## Kutija igre (glavni element interfejsa)
@@ -72,21 +72,32 @@ površina na ekranu (osim headera).
 - Ispod kutije: naslov (najviše 2 reda), oznake platformi, cena; stara cena precrtana kad je na
   popustu; oznaka „−20%“ u gornjem levom uglu kutije
 - Igre koje tek izlaze dobijaju belu oznaku „Pre-order“ sa okvirom umesto crne oznake popusta
-- Hover (desktop): kutija se podigne 4 px i okvir postane crn; cela kutija je link ka igri
+- Hover (desktop): kutija se podigne 8 px, okvir postane crn, ispod se pojavi senka, a slika se
+  blago uveća (105%); cela kutija je link ka igri
 - Fokus (tastatura): vidljiv sivi prsten (`ring`)
 - Ista komponenta u karuselima i u mreži kataloga
+
+## Početna sa katalogom
+Jedna stranica, odozgo nadole: karusel „Best sellers“, pa naslov „All games“, red sa pretragom,
+dugmetom „Filters“ i sortiranjem, čipovi aktivnih filtera i mreža kutija.
 
 ## Karusel
 - Naslov levo, link „Prikaži sve“ i dugmad ← → desno
 - Dugmad sa strelicama: kvadrat 40 px, crna (`primary`), onemogućena na krajevima sa 50% providnosti
-- Na telefonu se vide 2 kutije (i deo treće), na desktopu 5–6; skrolovanje se „lepi“ za kutiju
+- Klik na strelicu glatko klizi za ceo ekran kutija (smooth scroll); bez animacije uz
+  `prefers-reduced-motion`
+- Na telefonu se vide 2 kutije (i deo treće), na desktopu 6; skrolovanje se „lepi“ za kutiju
 - Prevlačenje na ekranu osetljivom na dodir, strelice na svim veličinama
+- Red ima prostor iznad i ispod da podignuta kutija i senka ne budu odsečeni
 
 ## Katalog
-- Telefon: polje za pretragu, zatim red sa dugmetom „Filteri (2)“ i izborom sortiranja; filteri
-  se otvaraju u donjem panelu; mreža od 2 kolone
-- Desktop: bočna kolona sa filterima (240 px) levo, mreža od 5 kolona desno; izbor sortiranja
-  iznad mreže
+- Telefon: polje za pretragu, zatim red sa dugmetom „Filters“ i izborom sortiranja; mreža od 2 kolone
+- Desktop: pretraga levo, „Filters“ i sortiranje desno u istom redu; mreža od 5 kolona preko cele
+  širine (nema bočne kolone)
+- **Panel sa filterima** klizi sa desne strane na svim veličinama (`Sheet`, `side="right"`): preko
+  celog ekrana na telefonu, širine `max-w-md` na desktopu, sa tamnim slojem iza. Dno panela je
+  zalepljeno: „Clear all“ (outline) i „Show games“ (crno) jedno pored drugog
+- Broj aktivnih filtera je mali crni krug sa belim brojem u dugmetu „Filters“
 - Aktivni filteri kao `secondary` čipovi sa ✕, plus „Obriši sve“ kao tekstualno dugme
 - Broj rezultata iznad mreže u `muted-foreground`
 
@@ -110,7 +121,7 @@ površina na ekranu (osim headera).
 - Dugmad koja čuvaju podatke prikazuju spinner i onemogućena su
 
 ## Interakcija i animacije
-- Hover na kutiji: podizanje i crni okvir, 200 ms
+- Hover na kutiji: podizanje 8 px, crni okvir i senka za 200 ms, uvećanje slike za 300 ms
 - Dodavanje u korpu: brojač „poskoči“, 250 ms, plus kratka poruka „Dodato u korpu“
 - Filteri i sortiranje odmah menjaju listu i čuvaju se u URL-u
 - Sve animacije traju 150–250 ms i isključuju se uz `prefers-reduced-motion`

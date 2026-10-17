@@ -87,7 +87,7 @@ export function GameCarousel({ title, filters, seeAllTo, limit = 10 }: GameCarou
         <ul
           ref={trackRef}
           onScroll={updateArrows}
-          className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pt-1 pb-2 [scrollbar-width:none] md:mx-0 md:scroll-px-0 md:px-0"
+          className="-mx-4 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pt-3 pb-6 [scrollbar-width:none] md:mx-0 md:scroll-px-0 md:px-0"
         >
           {games.slice(0, limit).map((game) => (
             <li key={game.id} className={itemClass}>

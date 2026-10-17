@@ -22,8 +22,8 @@ export function GameBox({ game }: GameBoxProps) {
       to={`/games/${game.id}`}
       className="group flex flex-col gap-2 rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
     >
-      <div className="relative overflow-hidden rounded-sm border bg-muted transition-[translate,border-color] duration-200 group-hover:-translate-y-1 group-hover:border-primary motion-reduce:transition-none">
-        <img src={game.coverUrl} alt={`${game.title} box art`} loading="lazy" className="aspect-[3/4] w-full object-cover" />
+      <div className="relative overflow-hidden rounded-sm border bg-muted transition-[translate,border-color,box-shadow] duration-200 ease-out group-hover:-translate-y-2 group-hover:border-primary group-hover:shadow-xl group-focus-visible:-translate-y-2 motion-reduce:transition-none motion-reduce:group-hover:translate-y-0">
+        <img src={game.coverUrl} alt={`${game.title} box art`} loading="lazy" className="aspect-[3/4] w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
         {comingSoon ? (
           <span className="absolute top-2 left-2 rounded-sm border bg-background px-2 py-1 text-xs font-semibold text-foreground">
             Pre-order

@@ -1,4 +1,5 @@
-import { SlidersHorizontal } from 'lucide-react'
+import { Plus, SlidersHorizontal } from 'lucide-react'
+import { Link } from 'react-router'
 
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -8,14 +9,26 @@ import { GameSortSelect } from '@/features/games/components/game-sort-select'
 import { GamesFilters } from '@/features/games/components/games-filters'
 import { GamesGrid } from '@/features/games/components/games-grid'
 import { countActiveFilters, useGameFilters } from '@/features/games/hooks/use-game-filters'
+import { useCurrentUser } from '@/features/users/api/use-users'
 
 export function Games() {
   const { filters, setFilters, clearFilters } = useGameFilters()
   const activeCount = countActiveFilters(filters)
+  const { data: user } = useCurrentUser()
 
   return (
     <section className="flex flex-col gap-6">
-      <h1 className="text-3xl font-bold md:text-4xl">All games</h1>
+      <div className="flex items-center justify-between gap-4">
+        <h1 className="text-3xl font-bold md:text-4xl">All games</h1>
+        {user?.role === 'admin' && (
+          <Button asChild variant="outline">
+            <Link to="/admin/games/new">
+              <Plus />
+              Add game
+            </Link>
+          </Button>
+        )}
+      </div>
 
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <div className="md:max-w-md md:flex-1">

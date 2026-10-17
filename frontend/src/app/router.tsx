@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router'
 
 import { Home } from '@/app/routes/home'
+import { AdminGameEdit } from '@/app/routes/admin-game-edit'
+import { AdminGameNew } from '@/app/routes/admin-game-new'
 import { Cart } from '@/app/routes/cart'
 import { Game } from '@/app/routes/game'
 import { Games } from '@/app/routes/games'
@@ -28,6 +30,8 @@ export const router = createBrowserRouter([
       { path: '/games/:id', element: <Game /> },
       { path: '/cart', element: <Cart /> },
       { path: '/sign-in', element: <SignIn /> },
+      { path: '/admin/games/new', element: <AdminGameNew /> },
+      { path: '/admin/games/:id/edit', element: <AdminGameEdit /> },
       { path: '*', element: <NotFound /> },
     ],
   },

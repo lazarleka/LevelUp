@@ -21,8 +21,8 @@ type GameShowcaseProps = {
 
 /** Angle between neighbouring boxes on the ring. */
 const STEP_DEG = 22
-/** Boxes turned further than this are hidden; 3 steps (66°) on each side stay visible. */
-const MAX_VISIBLE_DEG = 75
+/** Boxes turned further than this are hidden; 2 steps (44°) on each side stay visible, further ones are only edge-on slivers. */
+const MAX_VISIBLE_DEG = 50
 /** At least this many boxes must fit on each side of the front one. */
 const MIN_SIDE_BOXES = 2
 /** How far the front box comes out toward the viewer, as a share of its width.
@@ -76,9 +76,16 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
   // enough that two boxes still fit on each side of the front one (on phones they overlap a little).
   const toRad = (deg: number) => (deg * Math.PI) / 180
   const naturalRadius = (boxWidth * (0.5 + GAP)) / Math.tan(toRad(STEP_DEG / 2))
-  const fittingRadius = (stageWidth / 2 - boxWidth * 0.3) / Math.sin(toRad(STEP_DEG * MIN_SIDE_BOXES))
+  const fittingRadius = (stageWidth / 2 - boxWidth * 0.45) / Math.sin(toRad(STEP_DEG * MIN_SIDE_BOXES))
   const radius = boxWidth > 0 && stageWidth > 0 ? Math.max(0, Math.min(naturalRadius, fittingRadius)) : 0
   const lift = boxWidth * FRONT_LIFT
+
+  // A box is shown only if its whole cover fits inside the stage.
+  const fitsOnStage = (offset: number) => {
+    const angle = toRad(Math.abs(offset) * STEP_DEG)
+    const halfWidth = (boxWidth / 2) * Math.cos(angle) * arcScale(Math.abs(offset))
+    return radius * Math.sin(angle) + halfWidth <= stageWidth / 2
+  }
 
   // Remember where each box was, to spot the one that wraps around.
   useEffect(() => {
@@ -152,7 +159,7 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
         </div>
       </div>
 
-      {isLoading && <Skeleton className="mx-auto aspect-[3/4] w-[38%] rounded-sm md:w-64" />}
+      {isLoading && <Skeleton className="mx-auto aspect-[3/4] w-[26%] rounded-sm md:w-44" />}
 
       {error && (
         <div className="flex items-center gap-4">
@@ -166,7 +173,7 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
       {count > 0 && (
         <div
           ref={stageRef}
-          className="relative -mx-4 touch-pan-y overflow-hidden bg-muted px-4 pt-24 pb-10 md:mx-0 md:pt-28 md:rounded-xl md:px-0"
+          className="relative -mx-4 touch-pan-y overflow-hidden bg-muted px-4 pt-16 pb-10 md:mx-0 md:pt-20 md:rounded-xl md:px-0"
           // Looking from the height of the boxes' bottom edge keeps every box standing on one line.
           style={{ perspective: `${Math.max(radius * 3, 900)}px`, perspectiveOrigin: '50% calc(100% - 2.5rem)' }}
           onPointerDown={onPointerDown}
@@ -174,10 +181,10 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
           onPointerCancel={() => (swipeStart.current = null)}
         >
           {/* The front box sets the size of the stage; the ring is built around it. */}
-          <div ref={sizerRef} className="invisible mx-auto aspect-[3/4] w-[38%] md:w-64" aria-hidden="true" />
+          <div ref={sizerRef} className="invisible mx-auto aspect-[3/4] w-[26%] md:w-44" aria-hidden="true" />
           <ul
             aria-live={paused ? 'polite' : 'off'}
-            className="absolute inset-x-0 top-24 mx-auto aspect-[3/4] md:top-28 w-[38%] [transform-style:preserve-3d] md:w-64"
+            className="absolute inset-x-0 top-16 mx-auto aspect-[3/4] md:top-20 w-[26%] [transform-style:preserve-3d] md:w-44"
             style={{ transform: `translateZ(${-radius}px)` }}
           >
             {games.map((game, index) => {
@@ -205,7 +212,7 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
                   style={{
                     // The front box steps out of the ring toward the viewer, so it reads bigger.
                     transform: `rotateY(${angle}deg) translateZ(${radius + (isFront ? lift : 0)}px) scale(${isFront ? FRONT_SCALE : arcScale(Math.abs(offset))})`,
-                    opacity: Math.abs(angle) > MAX_VISIBLE_DEG ? 0 : 1,
+                    opacity: Math.abs(angle) > MAX_VISIBLE_DEG || !fitsOnStage(offset) ? 0 : 1,
                   }}
                 >
                   <Link

@@ -85,7 +85,9 @@ dugmetom „Filters“ i sortiranjem, čipovi aktivnih filtera i mreža kutija.
 Polica sa najprodavanijim igrama na vrhu početne (`GameShowcase`), po uzoru na „Perpetual Motion“
 slajdere.
 - **3D prsten**: igre stoje na luku oko glavne igre, 22° jedna od druge, kao na okruglom stalku.
-  Vide se bar 2 igre sa svake strane (na desktopu 3); prečnik prstena se prilagođava širini ekrana
+  Vide se po 2 igre sa svake strane, uvek cele (igra koja ne bi cela stala se sakrije); prečnik
+  prstena se prilagođava širini ekrana
+- Kutije su male da se ceo cover vidi: 26% širine ekrana na telefonu, 176 px na desktopu
 - **Glavna igra** je napred i najviša: izlazi iz prstena ka gledaocu, veća je za 18% i ima senku
 - **Visine padaju u polukrug**: što je igra dalja od glavne, to je niža (vrhovi prate polukrug),
   a sve stoje na istoj donjoj liniji

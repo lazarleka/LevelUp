@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 const links = [
   { to: '/', label: 'Home' },
-  { to: '/listings', label: 'Listings' },
+  { to: '/games', label: 'Games' },
 ]
 
 export function AppLayout() {

@@ -11,7 +11,7 @@ export function Home() {
         and write DESIGN.md.
       </p>
       <Button asChild className="mt-8">
-        <Link to="/listings">See the example list</Link>
+        <Link to="/games">Browse games</Link>
       </Button>
     </section>
   )

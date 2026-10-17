@@ -3,8 +3,9 @@ import { NotFoundError, delay } from '@/lib/mock-db'
 import { finalPrice, isComingSoon } from '../types'
 import type { Game, GameFilters, GameSort, NewGame } from '../types'
 
-// Placeholder box art in a 3:4 ratio; replace with your own images later.
-const cover = (seed: string) => `https://picsum.photos/seed/${seed}/600/800`
+// Official box art, linked from the game's English Wikipedia article (non-free, used there under
+// fair use). Fine for a workshop demo; a real shop would use art licensed from the publishers.
+const cover = (path: string) => `https://upload.wikimedia.org/wikipedia/en/${path}`
 
 let games: Game[] = [
   {
@@ -19,7 +20,7 @@ let games: Game[] = [
     deluxePrice: 99.99,
     discountPercent: 0,
     releaseDate: '2026-11-19',
-    coverUrl: cover('gta6'),
+    coverUrl: cover('4/46/Grand_Theft_Auto_VI.png'),
     rating: 0,
     soldCount: 0,
     inStock: true,
@@ -36,7 +37,7 @@ let games: Game[] = [
     deluxePrice: 79.99,
     discountPercent: 20,
     releaseDate: '2025-10-02',
-    coverUrl: cover('yotei'),
+    coverUrl: cover('1/18/Ghost_of_Y%C5%8Dtei_cover_art.png'),
     rating: 4.7,
     soldCount: 1840,
     inStock: true,
@@ -53,7 +54,7 @@ let games: Game[] = [
     deluxePrice: 99.99,
     discountPercent: 35,
     releaseDate: '2025-09-26',
-    coverUrl: cover('fc26'),
+    coverUrl: cover('2/2f/FC_26_Cover.png'),
     rating: 3.9,
     soldCount: 3120,
     inStock: true,
@@ -70,7 +71,7 @@ let games: Game[] = [
     deluxePrice: null,
     discountPercent: 0,
     releaseDate: '2025-06-05',
-    coverUrl: cover('mariokart'),
+    coverUrl: cover('6/65/Mario_Kart_World_Cover_Artwork.png'),
     rating: 4.6,
     soldCount: 2760,
     inStock: true,
@@ -87,7 +88,7 @@ let games: Game[] = [
     deluxePrice: 99.99,
     discountPercent: 15,
     releaseDate: '2025-10-10',
-    coverUrl: cover('battlefield6'),
+    coverUrl: cover('8/87/Battlefield_6_cover_art.jpg'),
     rating: 4.3,
     soldCount: 2290,
     inStock: true,
@@ -104,7 +105,7 @@ let games: Game[] = [
     deluxePrice: 54.99,
     discountPercent: 0,
     releaseDate: '2025-05-30',
-    coverUrl: cover('nightreign'),
+    coverUrl: cover('f/f0/Elden_Ring_Nightreign_cover_art.png'),
     rating: 4.2,
     soldCount: 1510,
     inStock: true,
@@ -121,7 +122,7 @@ let games: Game[] = [
     deluxePrice: null,
     discountPercent: 0,
     releaseDate: '2025-09-04',
-    coverUrl: cover('silksong'),
+    coverUrl: cover('0/05/Silksong.jpg'),
     rating: 4.8,
     soldCount: 1980,
     inStock: true,
@@ -138,7 +139,7 @@ let games: Game[] = [
     deluxePrice: 99.99,
     discountPercent: 40,
     releaseDate: '2025-02-11',
-    coverUrl: cover('civ7'),
+    coverUrl: cover('d/d5/Civilization_VII_cover.png'),
     rating: 3.8,
     soldCount: 640,
     inStock: true,
@@ -155,7 +156,7 @@ let games: Game[] = [
     deluxePrice: null,
     discountPercent: 10,
     releaseDate: '2025-07-17',
-    coverUrl: cover('bananza'),
+    coverUrl: cover('0/01/Donkey_Kong_Bananza_updated_box_art.png'),
     rating: 4.6,
     soldCount: 1320,
     inStock: true,
@@ -172,7 +173,7 @@ let games: Game[] = [
     deluxePrice: null,
     discountPercent: 25,
     releaseDate: '2025-03-06',
-    coverUrl: cover('splitfiction'),
+    coverUrl: cover('4/40/Split_Fiction_cover_art.jpg'),
     rating: 4.7,
     soldCount: 1150,
     inStock: false,
@@ -189,7 +190,7 @@ let games: Game[] = [
     deluxePrice: 79.99,
     discountPercent: 50,
     releaseDate: '2022-03-04',
-    coverUrl: cover('gt7'),
+    coverUrl: cover('1/14/Gran_Turismo_7_cover_art.jpg'),
     rating: 4.4,
     soldCount: 870,
     inStock: true,
@@ -206,7 +207,7 @@ let games: Game[] = [
     deluxePrice: 99.99,
     discountPercent: 0,
     releaseDate: '2025-09-05',
-    coverUrl: cover('nba2k26'),
+    coverUrl: cover('1/1d/NBA_2K26_Leave_No_Doubt_edition_cover.jpg'),
     rating: 3.6,
     soldCount: 980,
     inStock: true,

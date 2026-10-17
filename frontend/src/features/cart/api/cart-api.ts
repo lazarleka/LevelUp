@@ -9,7 +9,7 @@ let items: CartItem[] = [
     id: 1,
     gameId: 7,
     title: 'Hollow Knight: Silksong',
-    coverUrl: 'https://picsum.photos/seed/silksong/600/800',
+    coverUrl: 'https://upload.wikimedia.org/wikipedia/en/0/05/Silksong.jpg',
     platform: 'switch',
     edition: 'standard',
     unitPrice: 19.99,

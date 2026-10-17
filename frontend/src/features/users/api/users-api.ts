@@ -13,8 +13,29 @@ let users: User[] = [
   { id: 8, name: 'Teodora Lekić', email: 'teodora.l@gmail.com', role: 'customer', createdAt: '2026-09-19' },
 ]
 
-// Mock session: who is signed in. Next workshop this becomes a real token from the backend.
-let currentUserId: number | null = null
+// Mock session: who is signed in, kept in localStorage so a reload keeps you signed in.
+// Next workshop this becomes a real token from the backend.
+const SESSION_KEY = 'levelup.userId'
+
+function readSession() {
+  try {
+    const id = Number(localStorage.getItem(SESSION_KEY))
+    return Number.isInteger(id) && id > 0 ? id : null
+  } catch {
+    return null
+  }
+}
+
+function writeSession(id: number | null) {
+  try {
+    if (id === null) localStorage.removeItem(SESSION_KEY)
+    else localStorage.setItem(SESSION_KEY, String(id))
+  } catch {
+    // Storage can be blocked (private mode); the session then lasts until reload.
+  }
+}
+
+let currentUserId: number | null = readSession()
 
 export const usersApi = {
   list: () => delay(users),
@@ -46,11 +67,13 @@ export const usersApi = {
     const user = users.find((u) => u.email.toLowerCase() === email.trim().toLowerCase())
     if (!user) return Promise.reject(new Error('No account with that email'))
     currentUserId = user.id
+    writeSession(user.id)
     return delay(user)
   },
 
   signOut: () => {
     currentUserId = null
+    writeSession(null)
     return delay(undefined)
   },
 

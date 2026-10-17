@@ -37,7 +37,7 @@ Početna i katalog su jedna stranica: prvo najprodavanije igre, odmah ispod cela
 - Slajder **Best sellers** sa 10 najprodavanijih igara (po `soldCount`) na 3D prstenu: glavna igra
   napred, najviša i najveća, a bar 2 igre sa svake strane, sve niže što su dalje (polukrug)
 - Na svake 3 sekunde red se sam pomeri za jedno mesto udesno; staje dok je miš iznad njega
-- Strelice ← →, prevlačenje na telefonu i klik na bočnu igru pomeraju red ručno; klik na glavnu
+- Bez strelica: prevlačenje na telefonu i klik na bočnu igru pomeraju red ručno; klik na glavnu
   igru otvara njenu stranicu
 - Ispod glavne igre su njen rang, naslov i cena
 
@@ -55,7 +55,7 @@ Početna i katalog su jedna stranica: prvo najprodavanije igre, odmah ispod cela
 - Filteri se primenjuju odmah, dok je panel otvoren
 - Broj rezultata („12 igara“)
 
-**Gotovo kada:** slajder se učitava preko `useGames`, sam se pomera, staje na hover, a strelice i
+**Gotovo kada:** slajder se učitava preko `useGames`, sam se pomera, staje na hover, a klik na bočnu igru i
 prevlačenje rade; svaki filter i
 sortiranje menjaju mrežu, filteri se kombinuju, URL se ažurira i vraća stanje posle osvežavanja,
 a prazan rezultat prikazuje „Nijedna igra ne odgovara“ sa dugmetom „Obriši filtere“.

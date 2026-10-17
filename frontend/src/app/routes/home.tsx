@@ -44,7 +44,7 @@ export function Home() {
 
       <section id="catalog" aria-labelledby="catalog-title" className="flex scroll-mt-4 flex-col gap-6">
         <div className="flex items-center justify-between gap-4">
-          <h2 id="catalog-title" className="text-2xl font-bold md:text-3xl">
+          <h2 id="catalog-title" className="border-l-4 border-primary pl-3 text-2xl font-bold md:text-3xl">
             All games
           </h2>
           {user?.role === 'admin' && (
@@ -83,7 +83,12 @@ export function Home() {
                   <GamesFilters filters={filters} onChange={setFilters} />
                 </div>
                 <SheetFooter className="sticky bottom-0 flex-row border-t bg-background">
-                  <Button variant="outline" className="h-11 flex-1" onClick={clearFilters} disabled={activeCount === 0}>
+                  <Button
+                    variant="outline"
+                    className="h-11 flex-1"
+                    onClick={clearFilters}
+                    disabled={activeCount === 0}
+                  >
                     Clear all
                   </Button>
                   <SheetClose asChild>

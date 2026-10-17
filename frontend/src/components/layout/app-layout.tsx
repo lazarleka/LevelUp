@@ -10,7 +10,7 @@ type AppLayoutProps = {
 export function AppLayout({ actions }: AppLayoutProps) {
   return (
     <div className="min-h-dvh">
-      <header className="bg-brand text-brand-foreground">
+      <header className="border-b-2 border-secondary bg-brand text-brand-foreground">
         <nav className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3 md:px-6">
           <Link to="/" className="font-heading text-2xl font-bold tracking-wide">
             LevelUp

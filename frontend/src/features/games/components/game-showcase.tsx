@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { MouseEvent, PointerEvent } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import type { CSSProperties, MouseEvent, PointerEvent } from 'react'
 import { Link } from 'react-router'
 
 import { Button } from '@/components/ui/button'
@@ -50,7 +49,7 @@ const mod = (value: number, count: number) => ((value % count) + count) % count
 const arcScale = (distance: number) => Math.sqrt(Math.max(0, 1 - (distance / ARC_STEPS) ** 2))
 
 // Best sellers on a 3D ring: one big game in front, the others curve away around it.
-// Every few seconds the ring turns one step to the right; hovering pauses it.
+// Every few seconds the next game comes to the front; hovering pauses it.
 // Each box sits at an angle from its distance to the front game; the one box that wraps from one
 // end of the list to the other does so behind the ring, without animation, so nothing flies across.
 export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: GameShowcaseProps) {
@@ -76,15 +75,14 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
   // enough that two boxes still fit on each side of the front one (on phones they overlap a little).
   const toRad = (deg: number) => (deg * Math.PI) / 180
   const naturalRadius = (boxWidth * (0.5 + GAP)) / Math.tan(toRad(STEP_DEG / 2))
-  const fittingRadius = (stageWidth / 2 - boxWidth * 0.45) / Math.sin(toRad(STEP_DEG * MIN_SIDE_BOXES))
+  const fittingRadius = (stageWidth / 2 - boxWidth * 0.58) / Math.sin(toRad(STEP_DEG * MIN_SIDE_BOXES))
   const radius = boxWidth > 0 && stageWidth > 0 ? Math.max(0, Math.min(naturalRadius, fittingRadius)) : 0
   const lift = boxWidth * FRONT_LIFT
 
   // A box is shown only if its whole cover fits inside the stage.
   const fitsOnStage = (offset: number) => {
-    const angle = toRad(Math.abs(offset) * STEP_DEG)
-    const halfWidth = (boxWidth / 2) * Math.cos(angle) * arcScale(Math.abs(offset))
-    return radius * Math.sin(angle) + halfWidth <= stageWidth / 2
+    const halfWidth = boxWidth * 0.58 * arcScale(Math.abs(offset))
+    return radius * Math.sin(toRad(Math.abs(offset) * STEP_DEG)) + halfWidth <= stageWidth / 2
   }
 
   // Remember where each box was, to spot the one that wraps around.
@@ -113,11 +111,11 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
     return () => observer.disconnect()
   }, [count])
 
-  // Turning "to the right": the game left of the front comes to the front.
+  // Advance in the opposite direction: the game right of the front comes to the front.
   useEffect(() => {
     if (paused || count < 2) return
     const timer = setInterval(() => {
-      if (!document.hidden) setTurn((t) => t - 1)
+      if (!document.hidden) setTurn((t) => t + 1)
     }, intervalMs)
     return () => clearInterval(timer)
   }, [paused, count, intervalMs])
@@ -129,7 +127,7 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
     if (swipeStart.current === null) return
     const delta = event.clientX - swipeStart.current
     swipeStart.current = null
-    // Swiping right pulls the left game to the front, like the automatic turn.
+    // Swiping right pulls the left game to the front.
     if (Math.abs(delta) > SWIPE_PX) setTurn((t) => t + (delta > 0 ? -1 : 1))
   }
 
@@ -147,17 +145,7 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
         if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
       }}
     >
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-2xl font-bold md:text-3xl">{title}</h2>
-        <div className="flex items-center gap-2">
-          <Button size="icon" aria-label="Previous game" disabled={count < 2} onClick={() => setTurn((t) => t - 1)}>
-            <ChevronLeft className="size-5" />
-          </Button>
-          <Button size="icon" aria-label="Next game" disabled={count < 2} onClick={() => setTurn((t) => t + 1)}>
-            <ChevronRight className="size-5" />
-          </Button>
-        </div>
-      </div>
+      <h2 className="border-l-4 border-primary pl-3 text-2xl font-bold md:text-3xl">{title}</h2>
 
       {isLoading && <Skeleton className="mx-auto aspect-[3/4] w-[26%] rounded-sm md:w-44" />}
 
@@ -173,9 +161,12 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
       {count > 0 && (
         <div
           ref={stageRef}
-          className="relative -mx-4 touch-pan-y overflow-hidden bg-muted px-4 pt-16 pb-10 md:mx-0 md:pt-20 md:rounded-xl md:px-0"
+          className="relative -mx-4 touch-pan-y overflow-hidden border-y border-primary/10 bg-muted bg-linear-to-br from-accent via-muted to-background px-4 pt-16 pb-10 md:mx-0 md:rounded-xl md:border md:pt-20 md:px-0"
           // Looking from the height of the boxes' bottom edge keeps every box standing on one line.
-          style={{ perspective: `${Math.max(radius * 3, 900)}px`, perspectiveOrigin: '50% calc(100% - 2.5rem)' }}
+          style={{
+            perspective: `${Math.max(radius * 3, 900)}px`,
+            perspectiveOrigin: '50% calc(100% - 2.5rem)',
+          }}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerCancel={() => (swipeStart.current = null)}
@@ -206,8 +197,9 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
                   key={game.id}
                   aria-hidden={!isFront}
                   className={cn(
-                    'absolute inset-0 origin-bottom [backface-visibility:hidden] motion-reduce:transition-none',
-                    !wrapped && 'transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                    'absolute inset-0 origin-bottom [transform-style:preserve-3d] motion-reduce:transition-none',
+                    !wrapped &&
+                      'transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
                   )}
                   style={{
                     // The front box steps out of the ring toward the viewer, so it reads bigger.
@@ -220,19 +212,94 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
                     tabIndex={isFront ? 0 : -1}
                     onClick={onClick}
                     draggable={false}
-                    className="group block h-full rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+                    className="group block h-full rounded-sm [transform-style:preserve-3d] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                   >
-                    <img
-                      src={game.coverUrl}
-                      alt={`${game.title} box art`}
-                      draggable={false}
-                      className={cn(
-                        'h-full w-full rounded-sm object-cover transition-[filter,box-shadow] duration-700',
-                        isFront
-                          ? 'shadow-2xl'
-                          : 'border brightness-90 group-hover:brightness-100',
-                      )}
-                    />
+                    {/* A closed case with real depth: the ring and case keep their own 3D transforms. */}
+                    <div
+                      className="relative h-full w-full [transform-style:preserve-3d] transition-transform duration-700 ease-out motion-reduce:transition-none"
+                      style={
+                        {
+                          '--case-depth': `${Math.max(10, boxWidth * 0.09)}px`,
+                          transform: 'rotateY(-16deg)',
+                        } as CSSProperties
+                      }
+                    >
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 rounded-sm border border-secondary bg-brand [backface-visibility:hidden]"
+                        style={{ transform: 'rotateY(180deg) translateZ(calc(var(--case-depth) / 2))' }}
+                      />
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-y-0 left-0 flex items-center justify-center overflow-hidden rounded-sm border border-brand bg-secondary text-secondary-foreground [backface-visibility:hidden]"
+                        style={{
+                          width: 'var(--case-depth)',
+                          transformOrigin: 'left center',
+                          transform: 'translateZ(calc(var(--case-depth) / 2)) rotateY(-90deg)',
+                        }}
+                      >
+                        <span className="absolute inset-0 bg-linear-to-r from-brand/70 via-transparent to-background/20" />
+                        <span className="relative max-h-[85%] truncate font-heading text-[clamp(6px,0.7vw,10px)] font-bold tracking-wider [writing-mode:vertical-rl]">
+                          {game.title}
+                        </span>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-y-0 right-0 rounded-sm border border-secondary bg-brand [backface-visibility:hidden]"
+                        style={{
+                          width: 'var(--case-depth)',
+                          transformOrigin: 'right center',
+                          transform: 'translateZ(calc(var(--case-depth) / 2)) rotateY(90deg)',
+                        }}
+                      />
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-x-0 top-0 border border-secondary bg-secondary [backface-visibility:hidden]"
+                        style={{
+                          height: 'var(--case-depth)',
+                          transformOrigin: 'center top',
+                          transform: 'translateZ(calc(var(--case-depth) / 2)) rotateX(90deg)',
+                        }}
+                      />
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-x-0 bottom-0 border border-secondary bg-brand [backface-visibility:hidden]"
+                        style={{
+                          height: 'var(--case-depth)',
+                          transformOrigin: 'center bottom',
+                          transform: 'translateZ(calc(var(--case-depth) / 2)) rotateX(-90deg)',
+                        }}
+                      />
+                      <div
+                        className={cn(
+                          'absolute inset-0 overflow-hidden rounded-sm border border-brand bg-brand [backface-visibility:hidden] transition-shadow duration-700 motion-reduce:transition-none',
+                          isFront ? 'shadow-2xl shadow-brand/35' : 'shadow-lg shadow-brand/20',
+                        )}
+                        style={{ transform: 'translateZ(calc(var(--case-depth) / 2))' }}
+                      >
+                        <img
+                          src={game.coverUrl}
+                          alt={`${game.title} box art`}
+                          draggable={false}
+                          className={cn(
+                            'h-full w-full object-cover transition-[filter] duration-700 motion-reduce:transition-none',
+                            !isFront && 'brightness-90 group-hover:brightness-100',
+                          )}
+                        />
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 rounded-sm ring-1 ring-inset ring-background/25"
+                        />
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-y-0 left-0 w-[5%] border-r border-brand/30 bg-linear-to-r from-background/30 via-brand/15 to-transparent"
+                        />
+                        <span
+                          aria-hidden="true"
+                          className="pointer-events-none absolute inset-0 bg-linear-to-tr from-brand/10 via-transparent to-background/20"
+                        />
+                      </div>
+                    </div>
                   </Link>
                 </li>
               )
@@ -249,10 +316,13 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
           <p className="text-sm text-muted-foreground">
             #{active + 1} best seller · {frontGame.publisher}
           </p>
-          <Link to={`/games/${frontGame.id}`} className="font-heading text-2xl font-bold hover:underline md:text-3xl">
+          <Link
+            to={`/games/${frontGame.id}`}
+            className="font-heading text-2xl font-bold hover:underline md:text-3xl"
+          >
             {frontGame.title}
           </Link>
-          <p className="font-heading text-xl font-bold">
+          <p className="font-heading text-xl font-bold text-primary">
             €{finalPrice(frontGame.price, frontGame.discountPercent).toFixed(2)}
             {frontGame.discountPercent > 0 && (
               <span className="ml-2 text-sm font-medium text-muted-foreground line-through">

@@ -1,12 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { GameFilters, NewGame } from '../types'
 import { gamesApi } from './games-api'
 
-export function useGames(filters: GameFilters = {}) {
+export function useGames(filters: GameFilters = {}, options: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: ['games', filters],
     queryFn: () => gamesApi.list(filters),
+    enabled: options.enabled,
+    // Keep showing the last results while new filters load, so the grid does not flash.
+    placeholderData: keepPreviousData,
   })
 }
 

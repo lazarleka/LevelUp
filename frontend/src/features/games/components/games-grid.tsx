@@ -1,3 +1,6 @@
+import { SearchX } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { useGames } from '../api/use-games'
@@ -6,13 +9,14 @@ import { GameBox } from './game-box'
 
 type GamesGridProps = {
   filters: GameFilters
+  onClearFilters?: () => void
 }
 
-const gridClass = 'mt-6 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-5'
+const gridClass = 'grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
 
 // Catalog grid with all three states: loading, empty and error.
-export function GamesGrid({ filters }: GamesGridProps) {
-  const { data: games, isLoading, error } = useGames(filters)
+export function GamesGrid({ filters, onClearFilters }: GamesGridProps) {
+  const { data: games, isLoading, error, refetch } = useGames(filters)
 
   if (isLoading) {
     return (
@@ -25,20 +29,42 @@ export function GamesGrid({ filters }: GamesGridProps) {
   }
 
   if (error) {
-    return <p className="mt-6 text-destructive">Games failed to load. Please try again.</p>
+    return (
+      <div className="flex flex-col items-start gap-3">
+        <p className="text-destructive">Games failed to load.</p>
+        <Button variant="outline" onClick={() => refetch()}>
+          Try again
+        </Button>
+      </div>
+    )
   }
 
   if (!games || games.length === 0) {
-    return <p className="mt-6 text-muted-foreground">No games match your search.</p>
+    return (
+      <div className="flex flex-col items-center gap-3 py-16 text-center">
+        <SearchX className="size-10 text-muted-foreground" />
+        <p className="font-semibold">No games match your filters.</p>
+        {onClearFilters && (
+          <Button variant="outline" onClick={onClearFilters}>
+            Clear filters
+          </Button>
+        )}
+      </div>
+    )
   }
 
   return (
-    <ul className={gridClass}>
-      {games.map((game) => (
-        <li key={game.id}>
-          <GameBox game={game} />
-        </li>
-      ))}
-    </ul>
+    <div className="flex flex-col gap-4">
+      <p className="text-sm text-muted-foreground" aria-live="polite">
+        {games.length} {games.length === 1 ? 'game' : 'games'}
+      </p>
+      <ul className={gridClass}>
+        {games.map((game) => (
+          <li key={game.id}>
+            <GameBox game={game} />
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }

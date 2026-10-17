@@ -53,6 +53,14 @@ export type NewGame = Omit<Game, 'id' | 'rating' | 'soldCount'>
 
 export type GameSort = 'newest' | 'price-asc' | 'price-desc' | 'rating' | 'best-selling'
 
+export const sortLabels: Record<GameSort, string> = {
+  newest: 'Newest',
+  'price-asc': 'Price: low to high',
+  'price-desc': 'Price: high to low',
+  rating: 'Best rated',
+  'best-selling': 'Best selling',
+}
+
 export type GameFilters = {
   search?: string
   platform?: Platform

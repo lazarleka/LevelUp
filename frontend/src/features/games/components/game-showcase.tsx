@@ -5,6 +5,7 @@ import { Link } from 'react-router'
 
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { cn } from '@/lib/utils'
 
 import { useGames } from '../api/use-games'
 import { finalPrice } from '../types'
@@ -18,22 +19,22 @@ type GameShowcaseProps = {
   intervalMs?: number
 }
 
-/** Each step away from the center shrinks a box by this much. */
-const SHRINK = 0.18
-/** Gap between boxes, as a share of the center box width. */
-const GAP = 0.06
-/** Boxes further than this from the center are hidden. */
-const MAX_OFFSET = 3
+/** Angle between neighbouring boxes on the ring. */
+const STEP_DEG = 22
+/** Boxes turned further than this are hidden; 3 steps (66°) on each side stay visible. */
+const MAX_VISIBLE_DEG = 75
+/** At least this many boxes must fit on each side of the front one. */
+const MIN_SIDE_BOXES = 2
+/** How far the front box comes out toward the viewer, as a share of its width.
+ * (No z-index here: in Chrome it flattens the 3D ring, so depth alone keeps the front box on top.) */
+const FRONT_LIFT = 0.6
+/** Extra size of the front box on top of the lift. */
+const FRONT_SCALE = 1.18
+/** Space between neighbouring boxes on the ring, as a share of the box width. */
+const GAP = 0.08
+/** Heights fall off along a semicircle this many steps wide: the front box is the tallest. */
+const ARC_STEPS = 4
 const SWIPE_PX = 40
-
-const scaleAt = (distance: number) => Math.max(0, 1 - SHRINK * distance)
-
-/** Horizontal position of the box `distance` steps from the center, in center-box widths. */
-function positionAt(distance: number) {
-  let position = 0
-  for (let i = 1; i <= distance; i++) position += (scaleAt(i - 1) + scaleAt(i)) / 2 + GAP
-  return position
-}
 
 /** Shortest signed distance from `active` to `index` on a ring of `count` items. */
 function ringOffset(index: number, active: number, count: number) {
@@ -43,22 +44,46 @@ function ringOffset(index: number, active: number, count: number) {
   return offset
 }
 
-// Best sellers as a shelf: one big game in the center, smaller ones on both sides.
-// Every few seconds the shelf steps one place to the right; hovering pauses it.
+const mod = (value: number, count: number) => ((value % count) + count) % count
+
+/** Size of a box `distance` steps from the front, so the tops of the boxes trace a semicircle. */
+const arcScale = (distance: number) => Math.sqrt(Math.max(0, 1 - (distance / ARC_STEPS) ** 2))
+
+// Best sellers on a 3D ring: one big game in front, the others curve away around it.
+// Every few seconds the ring turns one step to the right; hovering pauses it.
+// Each box sits at an angle from its distance to the front game; the one box that wraps from one
+// end of the list to the other does so behind the ring, without animation, so nothing flies across.
 export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: GameShowcaseProps) {
   const { data, isLoading, error, refetch } = useGames(filters)
   const games = (data ?? []).slice(0, limit)
   const count = games.length
 
-  const [active, setActive] = useState(0)
+  // How many steps the ring has turned; the front game is `turn` modulo the number of games.
+  const [turn, setTurn] = useState(0)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
+  const [boxWidth, setBoxWidth] = useState(0)
+  const [stageWidth, setStageWidth] = useState(0)
+  const sizerRef = useRef<HTMLDivElement>(null)
+  const stageRef = useRef<HTMLDivElement>(null)
   const swipeStart = useRef<number | null>(null)
+  const previousOffsets = useRef(new Map<number, number>())
 
   const paused = hovered || focused || reduceMotion
+  const active = count > 0 ? mod(turn, count) : 0
+  // Distance from the ring's axis to each box: neighbours side by side with a small gap, but small
+  // enough that two boxes still fit on each side of the front one (on phones they overlap a little).
+  const toRad = (deg: number) => (deg * Math.PI) / 180
+  const naturalRadius = (boxWidth * (0.5 + GAP)) / Math.tan(toRad(STEP_DEG / 2))
+  const fittingRadius = (stageWidth / 2 - boxWidth * 0.3) / Math.sin(toRad(STEP_DEG * MIN_SIDE_BOXES))
+  const radius = boxWidth > 0 && stageWidth > 0 ? Math.max(0, Math.min(naturalRadius, fittingRadius)) : 0
+  const lift = boxWidth * FRONT_LIFT
 
-  const step = (direction: 1 | -1) => setActive((i) => (count === 0 ? 0 : (i + direction + count) % count))
+  // Remember where each box was, to spot the one that wraps around.
+  useEffect(() => {
+    games.forEach((game, index) => previousOffsets.current.set(game.id, ringOffset(index, active, count)))
+  })
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -68,11 +93,24 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
     return () => query.removeEventListener('change', onChange)
   }, [])
 
-  // Moving "to the right" means the game on the left of the center becomes the new center.
+  useEffect(() => {
+    const sizer = sizerRef.current
+    const stage = stageRef.current
+    if (!sizer || !stage) return
+    const observer = new ResizeObserver(() => {
+      setBoxWidth(sizer.getBoundingClientRect().width)
+      setStageWidth(stage.getBoundingClientRect().width)
+    })
+    observer.observe(sizer)
+    observer.observe(stage)
+    return () => observer.disconnect()
+  }, [count])
+
+  // Turning "to the right": the game left of the front comes to the front.
   useEffect(() => {
     if (paused || count < 2) return
     const timer = setInterval(() => {
-      if (!document.hidden) setActive((i) => (i - 1 + count) % count)
+      if (!document.hidden) setTurn((t) => t - 1)
     }, intervalMs)
     return () => clearInterval(timer)
   }, [paused, count, intervalMs])
@@ -84,10 +122,11 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
     if (swipeStart.current === null) return
     const delta = event.clientX - swipeStart.current
     swipeStart.current = null
-    if (Math.abs(delta) > SWIPE_PX) step(delta > 0 ? -1 : 1)
+    // Swiping right pulls the left game to the front, like the automatic turn.
+    if (Math.abs(delta) > SWIPE_PX) setTurn((t) => t + (delta > 0 ? -1 : 1))
   }
 
-  const centerGame = games[active]
+  const frontGame = games[active]
 
   return (
     <section
@@ -104,16 +143,16 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
       <div className="flex items-center justify-between gap-4">
         <h2 className="text-2xl font-bold md:text-3xl">{title}</h2>
         <div className="flex items-center gap-2">
-          <Button size="icon" aria-label="Previous game" disabled={count < 2} onClick={() => step(-1)}>
+          <Button size="icon" aria-label="Previous game" disabled={count < 2} onClick={() => setTurn((t) => t - 1)}>
             <ChevronLeft className="size-5" />
           </Button>
-          <Button size="icon" aria-label="Next game" disabled={count < 2} onClick={() => step(1)}>
+          <Button size="icon" aria-label="Next game" disabled={count < 2} onClick={() => setTurn((t) => t + 1)}>
             <ChevronRight className="size-5" />
           </Button>
         </div>
       </div>
 
-      {isLoading && <Skeleton className="mx-auto aspect-[3/4] w-[44%] rounded-sm md:w-60" />}
+      {isLoading && <Skeleton className="mx-auto aspect-[3/4] w-[38%] rounded-sm md:w-64" />}
 
       {error && (
         <div className="flex items-center gap-4">
@@ -126,52 +165,66 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
 
       {count > 0 && (
         <div
-          className="relative -mx-4 touch-pan-y overflow-hidden px-4 md:mx-0 md:px-0"
+          ref={stageRef}
+          className="relative -mx-4 touch-pan-y overflow-hidden bg-muted px-4 pt-24 pb-10 md:mx-0 md:pt-28 md:rounded-xl md:px-0"
+          // Looking from the height of the boxes' bottom edge keeps every box standing on one line.
+          style={{ perspective: `${Math.max(radius * 3, 900)}px`, perspectiveOrigin: '50% calc(100% - 2.5rem)' }}
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
           onPointerCancel={() => (swipeStart.current = null)}
         >
-          {/* The center box sets the height; the others are laid over it. */}
-          <div className="invisible mx-auto aspect-[3/4] w-[44%] md:w-60" aria-hidden="true" />
-          <ul aria-live={paused ? 'polite' : 'off'}>
+          {/* The front box sets the size of the stage; the ring is built around it. */}
+          <div ref={sizerRef} className="invisible mx-auto aspect-[3/4] w-[38%] md:w-64" aria-hidden="true" />
+          <ul
+            aria-live={paused ? 'polite' : 'off'}
+            className="absolute inset-x-0 top-24 mx-auto aspect-[3/4] md:top-28 w-[38%] [transform-style:preserve-3d] md:w-64"
+            style={{ transform: `translateZ(${-radius}px)` }}
+          >
             {games.map((game, index) => {
               const offset = ringOffset(index, active, count)
-              const distance = Math.abs(offset)
-              const visible = distance <= MAX_OFFSET
-              const isCenter = offset === 0
-              const x = Math.sign(offset) * positionAt(distance) * 100
+              const isFront = offset === 0
+              const angle = offset * STEP_DEG
+              const previous = previousOffsets.current.get(game.id)
+              const wrapped = previous !== undefined && Math.abs(previous - offset) > 1
 
               const onClick = (event: MouseEvent) => {
-                // A side box first comes to the center; the center box opens the game.
-                if (isCenter) return
+                // A side box first turns to the front; the front box opens the game.
+                if (isFront) return
                 event.preventDefault()
-                setActive(index)
+                setTurn((t) => t + offset)
               }
 
               return (
                 <li
                   key={game.id}
-                  aria-hidden={!isCenter}
-                  className="absolute inset-x-0 bottom-0 mx-auto w-[44%] origin-bottom transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none md:w-60"
+                  aria-hidden={!isFront}
+                  className={cn(
+                    'absolute inset-0 origin-bottom [backface-visibility:hidden] motion-reduce:transition-none',
+                    !wrapped && 'transition-[transform,opacity] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]',
+                  )}
                   style={{
-                    transform: `translateX(${x}%) scale(${scaleAt(distance)})`,
-                    opacity: visible ? 1 : 0,
-                    zIndex: 10 - distance,
+                    // The front box steps out of the ring toward the viewer, so it reads bigger.
+                    transform: `rotateY(${angle}deg) translateZ(${radius + (isFront ? lift : 0)}px) scale(${isFront ? FRONT_SCALE : arcScale(Math.abs(offset))})`,
+                    opacity: Math.abs(angle) > MAX_VISIBLE_DEG ? 0 : 1,
                   }}
                 >
                   <Link
                     to={`/games/${game.id}`}
-                    tabIndex={isCenter ? 0 : -1}
+                    tabIndex={isFront ? 0 : -1}
                     onClick={onClick}
-                    className="group block rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+                    draggable={false}
+                    className="group block h-full rounded-sm focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
                   >
                     <img
                       src={game.coverUrl}
                       alt={`${game.title} box art`}
                       draggable={false}
-                      className={`aspect-[3/4] w-full rounded-sm border object-cover transition-[filter,box-shadow] duration-700 ${
-                        isCenter ? 'shadow-xl' : 'brightness-75 group-hover:brightness-90'
-                      }`}
+                      className={cn(
+                        'h-full w-full rounded-sm object-cover transition-[filter,box-shadow] duration-700',
+                        isFront
+                          ? 'shadow-2xl'
+                          : 'border brightness-90 group-hover:brightness-100',
+                      )}
                     />
                   </Link>
                 </li>
@@ -181,19 +234,22 @@ export function GameShowcase({ title, filters, limit = 10, intervalMs = 3000 }: 
         </div>
       )}
 
-      {centerGame && (
-        <div key={centerGame.id} className="flex animate-in flex-col items-center gap-1 text-center duration-500 fade-in slide-in-from-bottom-2">
+      {frontGame && (
+        <div
+          key={frontGame.id}
+          className="flex animate-in flex-col items-center gap-1 text-center duration-500 fade-in slide-in-from-bottom-2"
+        >
           <p className="text-sm text-muted-foreground">
-            #{active + 1} best seller · {centerGame.publisher}
+            #{active + 1} best seller · {frontGame.publisher}
           </p>
-          <Link to={`/games/${centerGame.id}`} className="font-heading text-2xl font-bold hover:underline md:text-3xl">
-            {centerGame.title}
+          <Link to={`/games/${frontGame.id}`} className="font-heading text-2xl font-bold hover:underline md:text-3xl">
+            {frontGame.title}
           </Link>
           <p className="font-heading text-xl font-bold">
-            €{finalPrice(centerGame.price, centerGame.discountPercent).toFixed(2)}
-            {centerGame.discountPercent > 0 && (
+            €{finalPrice(frontGame.price, frontGame.discountPercent).toFixed(2)}
+            {frontGame.discountPercent > 0 && (
               <span className="ml-2 text-sm font-medium text-muted-foreground line-through">
-                €{centerGame.price.toFixed(2)}
+                €{frontGame.price.toFixed(2)}
               </span>
             )}
           </p>

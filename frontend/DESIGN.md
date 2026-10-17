@@ -84,17 +84,23 @@ dugmetom „Filters“ i sortiranjem, čipovi aktivnih filtera i mreža kutija.
 ## Best sellers slider
 Polica sa najprodavanijim igrama na vrhu početne (`GameShowcase`), po uzoru na „Perpetual Motion“
 slajdere.
-- Jedna **glavna igra u centru**, najveća. Igre levo i desno od nje se smanjuju za 18% po koraku
-  udaljenosti, poravnate po dnu, pa red izgleda kao stepenice na obe strane
-- Vidi se do 3 igre sa svake strane na desktopu, po jedna (delimično) na telefonu
-- **Samo se pomera**: na svake 3 sekunde ceo red klizne za jedno mesto **udesno** (igra levo od
-  centra postaje glavna). Prelaz traje 700 ms sa mekim usporavanjem na kraju
+- **3D prsten**: igre stoje na luku oko glavne igre, 22° jedna od druge, kao na okruglom stalku.
+  Vide se bar 2 igre sa svake strane (na desktopu 3); prečnik prstena se prilagođava širini ekrana
+- **Glavna igra** je napred i najviša: izlazi iz prstena ka gledaocu, veća je za 18% i ima senku
+- **Visine padaju u polukrug**: što je igra dalja od glavne, to je niža (vrhovi prate polukrug),
+  a sve stoje na istoj donjoj liniji
+- Bočne igre su samo blago zatamnjene (90%), na hover pune svetline
+- Iza slajdera je svetlosiva pozadina (`bg-muted`), zaobljena na desktopu
+- **Samo se okreće**: na svake 3 sekunde prsten se okrene za jedno mesto **udesno** (igra levo od
+  glavne dolazi napred). Prelaz traje 700 ms sa mekim usporavanjem
+- Igra koja prelazi sa jednog kraja liste na drugi to radi iza prstena, bez animacije, pa ništa
+  ne preleće preko ekrana
 - **Pauza na hover**: dok je miš iznad slajdera (ili je fokus u njemu), kretanje stoji
-- Korisnik gleda levo i desno strelicama ← →, prevlačenjem prstom na telefonu ili klikom na
-  bočnu igru (ona dođe u centar); klik na glavnu igru otvara njenu stranicu
-- Bočne igre su malo zatamnjene, glavna ima senku
-- Ispod glavne igre: „#N best seller · izdavač“, naslov i cena, koji se menjaju uz kratko pojavljivanje
-- Uz `prefers-reduced-motion` nema automatskog kretanja ni animacije prelaza
+- Strelice ← →, prevlačenje prstom na telefonu i klik na bočnu igru (ona dođe napred); klik na
+  glavnu igru otvara njenu stranicu
+- Ispod glavne igre: „#N best seller · izdavač“, naslov i cena
+- Uz `prefers-reduced-motion` nema automatskog okretanja ni animacije prelaza
+- Tehnička napomena: bez `z-index` na karticama, jer u Chromeu poravna 3D prsten u ravan
 
 ## Katalog
 - Telefon: polje za pretragu, zatim red sa dugmetom „Filters“ i izborom sortiranja; mreža od 2 kolone

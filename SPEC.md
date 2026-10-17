@@ -34,8 +34,8 @@ ikonica korpe sa brojem stavki i prijava / ime korisnika.
 Početna i katalog su jedna stranica: prvo najprodavanije igre, odmah ispod cela ponuda.
 
 **Najprodavanije (vrh stranice)**
-- Slajder **Best sellers** sa 10 najprodavanijih igara (po `soldCount`): jedna glavna igra u
-  centru, manje igre levo i desno (što dalje od centra, to manje)
+- Slajder **Best sellers** sa 10 najprodavanijih igara (po `soldCount`) na 3D prstenu: glavna igra
+  napred, najviša i najveća, a bar 2 igre sa svake strane, sve niže što su dalje (polukrug)
 - Na svake 3 sekunde red se sam pomeri za jedno mesto udesno; staje dok je miš iznad njega
 - Strelice ← →, prevlačenje na telefonu i klik na bočnu igru pomeraju red ručno; klik na glavnu
   igru otvara njenu stranicu

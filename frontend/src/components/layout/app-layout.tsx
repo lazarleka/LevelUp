@@ -16,7 +16,7 @@ export function AppLayout({ actions }: AppLayoutProps) {
             to="/"
             className="shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
           >
-            <img src="/levelup-logo.webp" alt="LevelUp" width={348} height={128} className="h-12 w-auto md:h-14" />
+            <img src="/levelup-logo.webp" alt="LevelUp" width={261} height={96} className="h-9 w-auto md:h-10" />
           </Link>
           <div className="ml-auto flex items-center gap-2">
             <Link

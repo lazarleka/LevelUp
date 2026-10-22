@@ -12,8 +12,11 @@ export function AppLayout({ actions }: AppLayoutProps) {
     <div className="min-h-dvh">
       <header className="border-b-2 border-secondary bg-brand text-brand-foreground">
         <nav className="mx-auto flex max-w-6xl items-center gap-6 px-4 py-3 md:px-6">
-          <Link to="/" className="font-heading text-2xl font-bold tracking-wide">
-            LevelUp
+          <Link
+            to="/"
+            className="shrink-0 rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            <img src="/levelup-logo.webp" alt="LevelUp" width={261} height={96} className="h-9 w-auto md:h-10" />
           </Link>
           <div className="ml-auto flex items-center gap-2">
             <Link

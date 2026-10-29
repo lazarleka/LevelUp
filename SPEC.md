@@ -23,12 +23,13 @@ i greške, i stranica izgleda kako treba na 375 px i 1440 px.
 | 1–2 | Početna sa katalogom (najprodavanije + lista + filter) | `/` (stari `/games` preusmerava ovde) | da |
 | 3 | Detalj igre | `/games/:id` | da |
 | 4 | Korpa | `/cart` | da |
+| 7 | Omiljene igre | `/favorites` | dodato na zahtev korisnika |
 | 5 | Prijava | `/sign-in` | da |
 | 6 | Forma za igru (kreiranje / izmena, admin) | `/admin/games/new`, `/admin/games/:id/edit` | da, traži je radionica |
 | – | Stranica nije pronađena | `*` | postoji |
 
 Svi ekrani dele isti header: crna traka sa LevelUp logom, ikonica pretrage (vodi na katalog),
-ikonica korpe sa brojem stavki i prijava / ime korisnika.
+ikonica omiljenih sa brojem igara, ikonica korpe sa brojem stavki i prijava / ime korisnika.
 
 ### 1–2. Početna sa katalogom
 Početna i katalog su jedna stranica: prvo najprodavanije igre, odmah ispod cela ponuda.
@@ -104,6 +105,20 @@ prijavu i nazad.
 **Gotovo kada:** kreirana igra se pojavljuje u katalogu, izmena se vidi na stranici detalja, a
 poruke validacije stoje pored polja.
 
+### 7. Omiljene igre
+- Dodavanje i uklanjanje iz omiljenih dostupno je samo uz specifikacije, pored dugmeta za korpu
+  u detaljima i unutrašnjosti otvorene 3D kutije. Na zatvorenim omotima nema srca.
+- `/favorites` prikazuje sačuvane igre kao iste 3D kartice; klik otvara isti prozor sa detaljima.
+- Srce u headeru vodi na omiljene i prikazuje broj sačuvanih igara.
+- Potrebna je prijava; neprijavljen korisnik se šalje na prijavu i vraća na izabranu igru
+  ili na `/favorites`, zavisno od mesta sa kog je krenuo.
+- Mock lista se čuva u localStorage, odvojeno po korisničkom nalogu; opstaje posle osvežavanja
+  i ponovne prijave u istom browseru. Čuvanje na serveru i sinhronizacija uređaja ostaju za backend.
+- Prazna lista prikazuje poruku i link ka katalogu; greška učitavanja ili čuvanja je vidljiva.
+
+**Gotovo kada:** dodavanje i uklanjanje ažuriraju listu omiljenih, detalje i brojač u headeru;
+osvežavanje čuva izbor, drugi nalog ima zasebnu listu, tastatura i prikaz na 375/1440 px rade.
+
 ## Pravila u celoj aplikaciji
 - Za dodavanje u korpu potrebna je prijava. Neprijavljen korisnik koji klikne „Dodaj u korpu“
   ide na `/sign-in` i vraća se na istu igru
@@ -112,7 +127,7 @@ poruke validacije stoje pored polja.
 - Svaka slika ima `alt`, svaka kontrola radi sa tastaturom, fokus je vidljiv
 
 ## Kasnije (ne pre nego što MVP proradi)
-Ocene i recenzije, „Možda ti se sviđa i…“, lista želja, detalji pre-ordera, plaćanje i „Moje
+Ocene i recenzije, „Možda ti se sviđa i…“, detalji pre-ordera, plaćanje i „Moje
 porudžbine“, registracija.
 
 ## Van opsega

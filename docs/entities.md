@@ -5,10 +5,11 @@
 > The entity type lives in `frontend/src/features/<name>/types.ts` and the mock API in
 > `frontend/src/features/<name>/api/<name>-api.ts`.
 
-LevelUp is a shop for new video games. Three entities: **Game**, **CartItem** and **User**.
+LevelUp is a shop for new video games. Entities: **Game**, **CartItem**, **User** and **Favorite**.
 
 ```
 User 1 ──── * CartItem * ──── 1 Game
+User 1 ──── * Favorite * ──── 1 Game
 ```
 
 Prices are in EUR with two decimals. Dates are ISO strings (`2026-10-17`).
@@ -137,3 +138,32 @@ The password is never part of the `User` object; the backend stores only its has
 | DELETE | `/users/:id` | self or admin |
 
 In the frontend mock, sign in accepts any known email and does not check the password.
+
+## Favorite
+
+A saved game belonging to one signed-in user. Code: `frontend/src/features/favorites/`.
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| gameId | positive integer | yes | references Game; unique within one user's list |
+| savedAt | ISO timestamp | yes | time the game was first saved |
+
+**Access rules:** a user may list, save and remove only their own favorites. The backend must derive
+the user from the authenticated session. An explicit user id is used only in the browser mock.
+
+**Rules:** saving an existing favorite is idempotent and preserves `savedAt`; removing a missing
+favorite succeeds. Favorites do not reserve stock or add anything to the cart. Game details and
+prices come from the games API; deleted games are omitted from the displayed list.
+
+**Mock persistence:** `localStorage["levelup.favorites.<userId>"]` stores `Favorite[]` for each
+account in the current browser. Invalid records are ignored. Storage failures surface to the UI;
+a failed write does not update the displayed saved state. Storage events refresh other open tabs.
+This does not provide cross-device persistence or server-side authorization.
+
+**Expected future backend API:**
+
+| Method | Path | Notes |
+| --- | --- | --- |
+| GET | `/favorites` | current user's `Favorite[]` |
+| PUT | `/favorites/:gameId` | idempotently save the game; reject unknown games |
+| DELETE | `/favorites/:gameId` | idempotently remove the game |

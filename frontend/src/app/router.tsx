@@ -1,6 +1,8 @@
 import { createBrowserRouter } from 'react-router'
 
 import { Home } from '@/app/routes/home'
+import { Favorites } from '@/app/routes/favorites'
+import { FavoritesNav } from '@/app/favorites-nav'
 import { AdminGameEdit } from '@/app/routes/admin-game-edit'
 import { AdminGameNew } from '@/app/routes/admin-game-new'
 import { Cart } from '@/app/routes/cart'
@@ -18,6 +20,7 @@ export const router = createBrowserRouter([
       <AppLayout
         actions={
           <>
+            <FavoritesNav />
             <CartButton />
             <UserMenu />
           </>
@@ -29,6 +32,7 @@ export const router = createBrowserRouter([
       { path: '/games', element: <Games /> },
       { path: '/games/:id', element: <Game /> },
       { path: '/cart', element: <Cart /> },
+      { path: '/favorites', element: <Favorites /> },
       { path: '/sign-in', element: <SignIn /> },
       { path: '/admin/games/new', element: <AdminGameNew /> },
       { path: '/admin/games/:id/edit', element: <AdminGameEdit /> },

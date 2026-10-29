@@ -152,6 +152,15 @@ iskačući prozor u obliku DVD kutije (`GameCaseDialog`). Stranica iza ostaje za
 - Izbor platforme i izdanja su toggle dugmad (sa okvirom; izabrano = `secondary`)
 - Dodaj u korpu: veliko `primary` dugme sa ikonicom korpe
 
+## Omiljene igre
+- Zatvorene kartice u katalogu i omiljenim nemaju srce preko omota.
+- Srce iz `lucide-react` dostupno je u detaljima i unutrašnjosti otvorene kutije, pored glavne
+  akcije, u istom redu, bez dodavanja visine kutiji. Popunjeno srce označava sačuvanu igru.
+- Header ima srce sa brojačem i aktivno stanje na `/favorites`.
+- Omiljene koriste iste 3D kartice i raspored kao katalog: 2 kolone na telefonu, 5 na desktopu.
+- Učitavanje koristi skeletone; prazna lista ima srce, kratko objašnjenje i dugme ka katalogu.
+- Dugmad imaju naziv sa naslovom igre, `aria-pressed`, vidljiv fokus i najavu promene.
+
 ## Forme (prijava, forma za igru)
 - Jedna kolona, labele iznad polja, `max-w-md` za prijavu, `max-w-2xl` za formu igre
 - Tekst greške ispod polja u `destructive`, `text-sm`

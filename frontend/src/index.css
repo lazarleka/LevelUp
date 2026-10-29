@@ -113,3 +113,26 @@
     @apply font-heading;
   }
 }
+
+/*
+ * TEMPORARY background preview: open the site with ?bg=dots|grid|stripes|spotlight.
+ * Remove this block (and the ?bg= lines in main.tsx) once the team picks one.
+ */
+body[data-bg='dots'] {
+  background-image: radial-gradient(var(--input) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+body[data-bg='grid'] {
+  background-image:
+    linear-gradient(var(--muted) 1px, transparent 1px),
+    linear-gradient(90deg, var(--muted) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+body[data-bg='stripes'] {
+  background-image: repeating-linear-gradient(135deg, var(--muted) 0 2px, transparent 2px 14px);
+}
+body[data-bg='spotlight'] {
+  background-color: var(--muted);
+  background-image: radial-gradient(ellipse 70% 55% at 50% 0%, var(--card) 0%, var(--background) 45%, transparent 100%);
+  background-repeat: no-repeat;
+}

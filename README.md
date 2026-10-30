@@ -8,6 +8,20 @@ Frontend for AI-DEV 2026 · Workshop 3, built with Claude Code from the
 [ai-frontend-starter](https://github.com/jovanp-najveci/ai-frontend-starter). Data is mocked for now;
 the backend comes next workshop.
 
+## Screenshots
+
+**Best sellers.** A 3D ring of game boxes that rotates on its own; the main game steps out toward the viewer.
+
+![Best sellers slider](docs/screenshots/home-best-sellers.jpg)
+
+**Catalog.** Every game as a 3D box, with search, filters, sorting, platforms and discounts.
+
+![Game catalog](docs/screenshots/catalog.jpg)
+
+**Opening a game.** The box flies to the center and opens like a DVD case; the disc spins and the right side holds platform, edition, price and add to cart.
+
+![Open game box](docs/screenshots/game-box.jpg)
+
 ## Run it
 
 Requires Node 22 and [pnpm](https://pnpm.io).
